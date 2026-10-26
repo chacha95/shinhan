@@ -5,7 +5,7 @@ const DIGITS = Array.from({ length: 30 }, (_, i) => i % 10); // 0-9 세 바퀴
 
 export function Odometer({ value }: { value: number }) {
   return (
-    <span className="inline-flex" aria-label={value.toLocaleString()}>
+    <span className="inline-flex tabular-nums" aria-label={value.toLocaleString()}>
       {[...value.toLocaleString()].map((ch, i) =>
         /\d/.test(ch) ? (
           <span key={i} className="inline-block h-[1em] overflow-hidden leading-none" aria-hidden>

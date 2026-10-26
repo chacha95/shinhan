@@ -34,10 +34,10 @@ export const products: { name: string; tag: string; copy: string; image?: string
 export const partnership = {
   eyebrow: 'PARTNERSHIP',
   title: ['함께 새로운 기회를', '만들어갑니다.'],
-  desc: '글로벌 제조사와 국내 의료기관을 잇는 파트너로서, 제품 도입부터 교육·사후관리까지 함께합니다.',
+  desc: '글로벌 브랜드 파트너십부터 해외 비즈니스, 제품 자료 요청까지.\n신한네트웍스의 전문 담당자가 정확하고 신속하게 안내해 드립니다.',
   cards: [
-    { label: 'Partnership', title: '제휴 및 공급 문의' },
-    { label: 'Product', title: '제품 상담 신청' },
+    { label: 'BUSINESS', title: '파트너십 문의' },
+    { label: 'PRODUCT', title: '제품 자료 요청' },
   ],
 };
 
