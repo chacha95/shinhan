@@ -72,7 +72,7 @@ function HeroRings() {
           className="a-ring absolute grid place-items-center rounded-full"
           style={{ ...at(162.9), background: '#223949', border: `${u(1.16)} solid ${SKY}0.42)`, boxShadow: `0 0 ${u(69.8)} ${SKY}0.12), inset 0 0 ${u(40.7)} ${SKY}0.15)` }}
         >
-          <Symbol className="block" style={{ width: u(55.76), height: u(50.6), translate: `${u(-5.8)} ${u(-2.9)}` }} />
+          <Symbol className="block" style={{ width: u(111.52), height: u(101.2), translate: `${u(-11.6)} ${u(-5.8)}` }} />
         </span>
         {/* GLOBAL NETWORK */}
         <div
