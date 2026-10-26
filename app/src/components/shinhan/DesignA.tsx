@@ -334,6 +334,8 @@ export default function DesignA() {
         className="a-philo relative grid h-svh place-items-center overflow-hidden"
         style={{ background: 'radial-gradient(50% 50% at 50% 50%, rgba(52, 143, 205, 0.25) 0%, rgba(13, 14, 16, 0.25) 100%), linear-gradient(99.48deg, #203441 6.71%, #0B0B0B 24.51%, #161E24 67.87%, #2A495E 101.65%), #032229' }}
       >
+        {/* 아래 심볼 섹션(#08131f)으로 자연스럽게 이어지도록 하단 페이드 */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[38%] bg-gradient-to-b from-transparent to-[#08131f]" />
         <div className="a-philo-bg absolute inset-0 grid place-items-center">
           {[560, 760, 980].map((s, i) => (
             <span
