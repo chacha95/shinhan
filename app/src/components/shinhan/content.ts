@@ -12,7 +12,7 @@ export const hero = {
 export const philosophy = {
   eyebrow: 'CONNECTING VALUE · CREATING TOMORROW',
   title: ['의료기기의 가치를 잇고,', '더 나은 내일을 연결하다.'],
-  desc: '국내 최초 Laser, Robot 수술기와 Target Biopsy를 보급한 이래, 신한네트웍스는 끊임없는 기술 개발과 서비스 재투자로 의료기기 시장을 선도해 왔습니다.',
+  desc: '신한네트웍스는 의료기기 분야의 전문성과 경험을 바탕으로 글로벌 브랜드와 의료 현장을 연결합니다.\n신뢰할 수 있는 제품과 체계적인 서비스를 통해 고객에게 새로운 가치를 제공합니다.',
 };
 
 export const stats = [

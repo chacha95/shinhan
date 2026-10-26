@@ -170,3 +170,10 @@
 .t-number { font-weight: 500; font-size: 23.27px; line-height: 34.91px; letter-spacing: 1.4px; }
 @keyframes hero-drift { from { transform: scale(1.04) translateX(0); } to { transform: scale(1.1) translateX(-2%); } }
 @keyframes header-drop { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+
+/* 한글 단어 중간에서 줄바꿈되지 않게 */
+@layer base {
+  body { word-break: keep-all; overflow-wrap: break-word; }
+  h1, h2, h3 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+}

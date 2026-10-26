@@ -12,55 +12,96 @@ import * as C from './content';
 
 const BG = '#08131f';
 
-function HeroRings() {
-  // 동심원 스테이지 — 단위는 vh (Figma 1048px 높이 기준)
+// Figma 히어로(1920×939) px → vh 환산
+const u = (px: number) => `${((px * 100) / 939).toFixed(3)}vh`;
+const SKY = 'rgba(121,201,250,';
+const BARS = [10.47, 19.78, 13.96, 25.6, 31.42, 10.47, 25.6, 31.42];
+
+/** 링 위의 점 — angle(도), 링 반지름(px) */
+function Dot({ angle, r, size, color, glow, ring }: { angle: number; r: number; size: number; color: string; glow: string; ring?: boolean }) {
   return (
-    <div className="a-stage pointer-events-none absolute left-1/2 top-[52%] z-0 opacity-40 lg:left-[64%] lg:opacity-100">
-      {/* 사선 */}
-      <span className="absolute left-0 top-0 h-px w-[78vh] -rotate-[62deg] bg-white/15" style={{ translate: '-50% 0' }} />
-      {/* 바깥 점선 원 + 궤도 점 */}
-      <div className="a-ring absolute left-0 top-0 h-[56vh] w-[56vh] -translate-x-1/2 -translate-y-1/2">
-        {/* 위치(translate)는 바깥, 회전은 안쪽 — GSAP transform과 CSS 회전 충돌 방지 */}
-        <div className="absolute inset-0 rounded-full border border-dashed border-white/30" style={{ animation: 'pv-spin 60s linear infinite' }}>
-          {[[-32, 0], [148, 0], [205, 0]].map(([deg], i) => (
-            <span key={i} className="absolute left-1/2 top-1/2 h-0 w-0" style={{ transform: `rotate(${deg}deg) translateX(28vh)` }}>
-              <span className="absolute -left-1 -top-1 h-2 w-2 rounded-full bg-[#71B4FE]" />
-            </span>
-          ))}
+    <span className="absolute left-1/2 top-1/2 h-0 w-0" style={{ transform: `rotate(${angle}deg) translateX(${u(r)})` }}>
+      <span
+        className="absolute rounded-full"
+        style={{
+          width: u(size),
+          height: u(size),
+          left: u(-size / 2),
+          top: u(-size / 2),
+          background: color,
+          boxShadow: `0 0 ${u(size * 2.25)} ${glow}`,
+          border: ring ? `${u(1.16)} solid ${SKY}0.3)` : undefined,
+        }}
+      />
+    </span>
+  );
+}
+
+function HeroRings() {
+  // 동심원 스테이지 — Figma 'Container 683×683' 레이어 값 그대로
+  const at = (size: number) => ({ width: u(size), height: u(size), left: u(341.5 - size / 2), top: u(341.5 - size / 2) });
+  return (
+    <div className="a-stage pointer-events-none absolute left-1/2 top-[52.5%] z-0 opacity-40 lg:left-[63.6%] lg:opacity-100">
+      <div className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ width: u(683), height: u(683), boxShadow: `0 0 ${u(104.7)} ${SKY}0.1)` }}>
+        {/* 사선 2개 */}
+        <span className="absolute left-1/2 top-1/2" style={{ width: u(628.31), height: u(1.16), translate: '-50% -50%', rotate: '-12deg', background: `linear-gradient(90deg, ${SKY}0) 0%, ${SKY}0.25) 50%, ${SKY}0) 100%)` }} />
+        <span className="absolute left-1/2 top-1/2" style={{ width: u(1.16), height: u(628.31), translate: '-50% -50%', rotate: '23deg', background: `linear-gradient(180deg, ${SKY}0) 0%, ${SKY}0.25) 50%, ${SKY}0) 100%)` }} />
+        {/* 안쪽 글로우 */}
+        <span className="a-ring absolute rounded-full" style={{ ...at(436.33), background: `radial-gradient(70.71% 70.71% at 50% 50%, ${SKY}0.17) 0%, ${SKY}0) 64%)`, boxShadow: `inset 0 0 ${u(139.6)} ${SKY}0.08)` }} />
+        {/* 바깥 점선 원 — 위치는 바깥, 회전은 안쪽 */}
+        <div className="a-ring absolute" style={at(559.66)}>
+          <div className="absolute inset-0 rounded-full" style={{ border: `${u(1.16)} dashed ${SKY}0.3)`, animation: 'pv-spin 80s linear infinite' }}>
+            <Dot angle={-82} r={279.83} size={9.31} color="#71B4FE" glow="#79C9FA" />
+            <Dot angle={-160} r={279.83} size={9.31} color="#71B4FE" glow="#73E8CF" ring />
+            <Dot angle={61} r={279.83} size={6.98} color="#B2DFFB" glow="#63E2C2" />
+          </div>
         </div>
-      </div>
-      {/* 퍼지는 파동 */}
-      {[0, 1.6].map((d) => (
-        <span key={d} className="absolute left-0 top-0 h-[34vh] w-[34vh] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#71B4FE]/50" style={{ animation: `a-wave 3.2s ease-out ${d}s infinite` }} />
-      ))}
-      {/* 밝은 실선 원 */}
-      <span className="a-ring absolute left-0 top-0 h-[34vh] w-[34vh] -translate-x-1/2 -translate-y-1/2 rounded-full border-[1.5px] border-[#4f8fe6]">
-        <span className="absolute left-1/2 top-1/2 h-0 w-0" style={{ animation: 'pv-spin 14s linear infinite' }}>
-          <span className="absolute h-1.5 w-1.5 rounded-full bg-[#71B4FE]" style={{ transform: 'translate(15.5vh, 4vh)' }} />
+        {/* 밝은 실선 원 + 퍼지는 파동 */}
+        {[0, 1.6].map((d) => (
+          <span key={d} className="absolute rounded-full" style={{ ...at(340.92), border: `${u(1.16)} solid ${SKY}0.45)`, animation: `a-wave 3.2s ease-out ${d}s infinite` }} />
+        ))}
+        <span className="a-ring absolute rounded-full" style={{ ...at(340.92), border: `${u(1.16)} solid #71B4FE` }} />
+        {/* 중심 링 + 작은 점 */}
+        <div className="a-ring absolute" style={at(197.8)}>
+          <div className="absolute inset-0 rounded-full" style={{ border: `${u(1.16)} solid ${SKY}0.24)`, animation: 'pv-spin 24s linear infinite reverse' }}>
+            <Dot angle={30} r={98.9} size={6.98} color="#71B4FE" glow="#79C9FA" />
+          </div>
+        </div>
+        {/* 중심 원 + 심볼 */}
+        <span
+          className="a-ring absolute grid place-items-center rounded-full"
+          style={{ ...at(162.9), background: '#223949', border: `${u(1.16)} solid ${SKY}0.42)`, boxShadow: `0 0 ${u(69.8)} ${SKY}0.12), inset 0 0 ${u(40.7)} ${SKY}0.15)` }}
+        >
+          <Symbol className="block" style={{ width: u(55.76), height: u(50.6), translate: `${u(-5.8)} ${u(-2.9)}` }} />
         </span>
-      </span>
-      <span className="a-ring absolute left-0 top-0 h-[27vh] w-[27vh] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/15" />
-      <span className="a-ring absolute left-0 top-0 h-[19.5vh] w-[19.5vh] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#4f8fe6]/40" />
-      {/* 안쪽 채워진 원 + 심볼 */}
-      <span className="a-ring absolute left-0 top-0 grid h-[16vh] w-[16vh] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-[#4f8fe6]/60 bg-[#1c3350]">
-        <Symbol className="h-[7vh] w-[7vh]" />
-      </span>
-      {/* 위젯 */}
-      <div className="a-widget absolute hidden border border-white/10 bg-[#1a2d40]/90 px-5 pb-4 pt-5 lg:block" style={{ left: '14.3vh', top: '-21.8vh', width: '18vh', minWidth: 170 }}>
-        <p className="t-caption whitespace-nowrap text-[#71B4FE]">GLOBAL NETWORK</p>
-        <p className="t-number mt-2 tabular-nums">
-          <span data-count="24">0</span> / 7
-        </p>
-        <span className="mt-3 block h-[2px] bg-white/10">
-          <span className="a-gauge block h-full w-[75%] bg-[#71B4FE]" />
-        </span>
-      </div>
-      <div className="a-widget absolute hidden border border-[#4f8fe6]/30 bg-[#173247]/90 px-5 py-4 lg:block" style={{ left: '-33.2vh', top: '12.4vh', minWidth: 190 }}>
-        <p className="t-caption whitespace-nowrap text-[#71B4FE]">MEDICAL TECHNOLOGY</p>
-        <div className="mt-3 flex h-8 items-end gap-1.5">
-          {[30, 60, 40, 85, 95, 30, 70, 95].map((v, i) => (
-            <span key={i} className={`a-bar w-4 ${i % 2 ? 'bg-[#71B4FE]' : 'bg-[#3b78c4]'}`} style={{ height: `${v}%` }} />
-          ))}
+        {/* GLOBAL NETWORK */}
+        <div
+          className="a-widget absolute hidden flex-col lg:flex"
+          style={{ left: u(485.26), top: u(120.34), width: u(183.84), height: u(103.76), padding: `${u(17.45)} ${u(19.78)}`, background: 'rgba(4,33,40,.74)', border: `${u(1.16)} solid ${SKY}0.25)`, boxShadow: `0 ${u(16.3)} ${u(46.5)} rgba(0,0,0,.16)` }}
+        >
+          <p className="whitespace-nowrap font-bold text-[#71B4FE]" style={{ fontSize: u(11.64), lineHeight: u(12), letterSpacing: u(1.47) }}>GLOBAL NETWORK</p>
+          <p className="font-medium tabular-nums" style={{ fontSize: u(23.27), lineHeight: u(35), letterSpacing: u(1.4), marginTop: u(3.5) }}>
+            <span data-count="24">0</span> / 7
+          </p>
+          <span className="block" style={{ height: u(2.33), marginTop: u(13.96), background: 'rgba(255,255,255,.1)' }}>
+            <span className="a-gauge block h-full bg-[#71B4FE]" style={{ width: '73.4%' }} />
+          </span>
+        </div>
+        {/* MEDICAL TECHNOLOGY */}
+        <div
+          className="a-widget absolute hidden flex-col justify-between lg:flex"
+          style={{ left: u(6.93), top: u(465.42), width: u(197.8), height: u(90.96), padding: `${u(16.5)} ${u(26.76)}`, background: 'rgba(4,33,40,.74)', border: `${u(1.16)} solid ${SKY}0.25)`, boxShadow: `0 ${u(16.3)} ${u(46.5)} rgba(0,0,0,.16)` }}
+        >
+          <p className="whitespace-nowrap font-bold text-[#71B4FE]" style={{ fontSize: u(11.64), lineHeight: u(12), letterSpacing: u(1.47) }}>MEDICAL TECHNOLOGY</p>
+          <div className="flex items-end justify-between" style={{ height: u(43.05) }}>
+            {BARS.map((h, i) => (
+              <span
+                key={i}
+                className="a-bar block"
+                style={{ width: u(15.13), height: u(h), background: `linear-gradient(180deg, #79C9FA 0%, ${SKY}0.61) 50%, ${SKY}0.415) 75%, ${SKY}0.3175) 87.5%, ${SKY}0.22) 100%)` }}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -178,7 +219,7 @@ export default function DesignA() {
         <div className="a-canvas absolute inset-0">
           <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(/hero/hero-bg.jpg)', animation: 'hero-drift 24s ease-in-out infinite alternate' }} />
         </div>
-        <WaveField cx={0.64} cy={0.52} circle={false} interactive={false} className="absolute inset-0 h-full w-full opacity-20 mix-blend-screen" />
+        <WaveField cx={0.64} cy={0.52} circle={false} interactive={false} className="absolute inset-0 h-full w-full opacity-15 mix-blend-screen" />
         <HeroRings />
         <div className="relative z-10 mx-auto flex h-full max-w-[1240px] flex-col justify-center px-6 pt-10">
           <p className="a-hero-fade t-eyebrow mb-7 flex items-center gap-3 !leading-[15px] text-[#71B4FE]">
@@ -198,17 +239,17 @@ export default function DesignA() {
             </span>
           </h1>
           <p className="a-hero-fade t-heading-sm mt-8 text-white/80">{C.hero.desc}</p>
-          <a href="#" className="a-hero-fade mt-12 t-button inline-flex w-fit items-center gap-6 border border-white/50 px-5 py-4 hover:bg-white hover:text-[#13243a]">
+          <a href="#" className="a-hero-fade mt-12 inline-flex h-[58px] w-[178px] items-center justify-center gap-5 border border-white/[0.32] text-[18px] font-bold leading-[28px] hover:bg-white hover:text-[#13243a]">
             {C.hero.cta} <ArrowUpRight className="h-4 w-4" />
           </a>
         </div>
         <div className="a-hero-fade absolute inset-x-0 bottom-0 z-10 mx-auto max-w-[1240px] px-6">
-          <div className="t-caption flex items-center justify-between border-t border-white/30 py-6 text-white/70">
+          <div className="t-caption flex h-[63px] items-center justify-between border-t border-white/70 !leading-4 text-white/70">
             <span>SHINHAN NETWORKS · MEDICAL DEVICE PARTNER</span>
             <span className="flex items-center gap-3">
-              SCROLL
-              <span className="relative block h-10 w-6 rounded-full border border-white/60">
-                <span className="absolute left-1/2 top-2 h-1.5 w-px -translate-x-1/2 bg-white" style={{ animation: 'drip 1.6s ease-in-out infinite' }} />
+              <span className="tracking-[1.62px]">SCROLL</span>
+              <span className="relative block h-[42px] w-[26px] rounded-[20px] border border-white/70">
+                <span className="absolute left-[11px] top-[14px] h-[7px] w-[2px] rounded-[2px] bg-[#71B4FE] opacity-65" style={{ animation: 'drip 1.6s ease-in-out infinite' }} />
               </span>
             </span>
           </div>
@@ -239,7 +280,7 @@ export default function DesignA() {
             <br />
             <span className="text-[#71B4FE]">{C.philosophy.title[1]}</span>
           </h2>
-          <p className="t-body-lg mx-auto mt-6 max-w-[560px] text-white/80">{C.philosophy.desc}</p>
+          <p className="t-body-lg mx-auto mt-6 whitespace-pre-line text-white/80">{C.philosophy.desc}</p>
         </div>
       </section>
 

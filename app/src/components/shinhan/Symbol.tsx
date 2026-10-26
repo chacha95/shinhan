@@ -4,6 +4,7 @@ import { LOCKUP_VIEWBOX, SYMBOL_VIEWBOX, WORDMARK_VIEWBOX, symbolPaths, wordmark
 
 type Props = {
   className?: string;
+  style?: React.CSSProperties;
   /** 패스마다 붙는 클래스 — GSAP로 외곽선 그리기·채우기 애니메이션 할 때 사용 */
   lineClassName?: string;
   /** 외곽선 스트로크 추가 (그리기 애니메이션용) */
@@ -20,10 +21,10 @@ function SymbolGradient({ id }: { id: string }) {
   );
 }
 
-export function Symbol({ className, lineClassName, outline }: Props) {
+export function Symbol({ className, style, lineClassName, outline }: Props) {
   const id = useId();
   return (
-    <svg viewBox={SYMBOL_VIEWBOX} className={className} aria-label="신한네트웍스 심볼">
+    <svg viewBox={SYMBOL_VIEWBOX} className={className} style={style} aria-label="신한네트웍스 심볼">
       <defs>
         <SymbolGradient id={id} />
       </defs>
