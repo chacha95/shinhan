@@ -1,4 +1,5 @@
 // 제품 비주얼 — 실제 제품 컷이 있으면 사용, 없으면 장비 실루엣 자리표시
+// 흰 배경 사진은 떠다니는 래퍼에 mix-blend-multiply를 걸어 카드 바탕에 녹임 (img에 걸면 transform 격리로 안 먹음)
 import Image from 'next/image';
 
 type Props = { name: string; image?: string; tone?: 'dark' | 'light'; className?: string };
@@ -20,7 +21,7 @@ export function ProductVisual({ name, image, tone = 'light', className }: Props)
         />
       ))}
       {image ? (
-        <div className="relative h-[86%] w-[70%]" style={{ animation: 'pv-float 6s ease-in-out infinite' }}>
+        <div className={`relative h-[86%] w-[70%] ${dark ? '' : 'mix-blend-multiply'}`} style={{ animation: 'pv-float 6s ease-in-out infinite' }}>
           <Image src={image} alt={name} fill loading="eager" sizes="(min-width: 768px) 40vw, 80vw" className="object-contain" />
         </div>
       ) : (

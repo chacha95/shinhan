@@ -24,11 +24,11 @@ export const stats = [
 
 export const products: { name: string; tag: string; copy: string; image?: string }[] = [
   { name: 'INMODE', image: '/products/inmode.png', tag: 'RF Platform', copy: '혁신적인 기술로\n의료의 새로운 기준을 제시합니다.' },
-  { name: 'SofWave', tag: 'Ultrasound Lifting', copy: '당신의 시간이\n느리게 흐를 수 있도록.' },
-  { name: 'StarWalker QX', tag: 'Hybrid Laser', copy: '나노와 피코,\n그 이상의 가치 하이브리드.' },
-  { name: 'J CATH', tag: 'EP Catheter', copy: '세계 최초\nMulti Bi-Directional Duodeca.' },
-  { name: 'ComboLab', tag: 'Hemodynamic · EP', copy: 'Hemodynamic과 EP 시술을\n단 하나의 장비로.' },
-  { name: 'Type 2300', tag: 'Ultrasound', copy: 'Ultrasound\nfor your speciality.' },
+  { name: 'SofWave', image: '/products/sofwave.png', tag: 'Ultrasound Lifting', copy: '당신의 시간이\n느리게 흐를 수 있도록.' },
+  { name: 'StarWalker QX', image: '/products/starwalker-qx.png', tag: 'Hybrid Laser', copy: '나노와 피코,\n그 이상의 가치 하이브리드.' },
+  { name: 'J CATH', image: '/products/j-cath.png', tag: 'EP Catheter', copy: '세계 최초\nMulti Bi-Directional Duodeca.' },
+  { name: 'ComboLab', image: '/products/combolab.png', tag: 'Hemodynamic · EP', copy: 'Hemodynamic과 EP 시술을\n단 하나의 장비로.' },
+  { name: 'Type 2300', image: '/products/type-2300.png', tag: 'Ultrasound', copy: 'Ultrasound\nfor your speciality.' },
 ];
 
 export const partnership = {
