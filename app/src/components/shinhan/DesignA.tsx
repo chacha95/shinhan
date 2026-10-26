@@ -143,6 +143,17 @@ function Header() {
   );
 }
 
+// 심볼 섹션 마지막 로크업 — 원본 AI 로고: 심볼↔워드마크 간격 = 심볼 폭의 11.6%
+const LOCK_SCALE = 0.55;
+function lockup() {
+  const mark = document.querySelector<HTMLElement>('.a-sym-mark')!;
+  const word = document.querySelector<HTMLElement>('.a-sym-word')!;
+  const mw = mark.offsetWidth * LOCK_SCALE;
+  const gap = mw * 0.116;
+  const total = mw + gap + word.offsetWidth;
+  return { markX: -total / 2 + mw / 2, wordX: -total / 2 + mw + gap };
+}
+
 export default function DesignA() {
   useSmoothScroll();
   const root = useRef<HTMLDivElement>(null);
@@ -173,7 +184,7 @@ export default function DesignA() {
 
       // 심볼 섹션 — 1·2·3 순서로 색이 채워짐 → 로고 자리로 이동 + 워드마크 좌→우
       const sym = gsap.timeline({
-        scrollTrigger: { trigger: '.a-sym', start: 'top top', end: '+=260%', scrub: 1, pin: true },
+        scrollTrigger: { trigger: '.a-sym', start: 'top top', end: '+=260%', scrub: 1, pin: true, invalidateOnRefresh: true },
       });
       sym
         .fromTo('.a-sym-line', { strokeDasharray: 1, strokeDashoffset: 1, fillOpacity: 0 }, { strokeDashoffset: 0, stagger: 0.12, duration: 0.8 })
@@ -181,8 +192,13 @@ export default function DesignA() {
         .from('.a-sym-step', { opacity: 0, y: 20, stagger: 0.4, duration: 0.4 }, 0)
         .to('.a-sym-ring', { scale: 1.6, opacity: 0, stagger: 0.1, duration: 1 }, '<0.5')
         .to('.a-sym-step', { opacity: 0, duration: 0.3 })
-        .to('.a-sym-mark', { xPercent: -70, scale: 0.55, duration: 1, ease: 'power2.inOut' })
-        .fromTo('.a-sym-word', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 1 }, '<0.3');
+        .to('.a-sym-mark', { x: () => lockup().markX, scale: LOCK_SCALE, duration: 1, ease: 'power2.inOut' })
+        .fromTo(
+          '.a-sym-word',
+          { x: () => lockup().wordX, clipPath: 'inset(0 100% 0 0)' },
+          { x: () => lockup().wordX, clipPath: 'inset(0 0% 0 0)', duration: 1 },
+          '<0.3',
+        );
 
       // 가치 — 겹친 세 원이 좌우로 펼쳐지며 텍스트 등장
       const vt = gsap.timeline({
@@ -295,10 +311,11 @@ export default function DesignA() {
             />
           ))}
           <div className="a-sym-mark relative">
-            <Symbol className="h-56 w-56" outline lineClassName="a-sym-line" />
+            <Symbol className="h-[210px] w-[224px]" outline lineClassName="a-sym-line" />
           </div>
-          <div className="a-sym-word absolute left-1/2 ml-4 ">
-            <LogoType className="h-[clamp(52px,6vw,88px)] w-auto" />
+          {/* 세로 가운데는 flex로, 가로 위치는 GSAP x로 */}
+          <div className="a-sym-word absolute inset-y-0 left-1/2 flex items-center">
+            <LogoType className="h-[80px] w-auto" />
           </div>
         </div>
         <div className="t-caption absolute bottom-[14%] flex gap-10 text-white/70">
@@ -364,13 +381,13 @@ export default function DesignA() {
                 key={c.title}
                 href="#"
                 data-reveal={i * 0.12}
-                className={`group flex items-center justify-between border px-6 py-7 transition ${i === 0 ? 'border-[#1F7AE0] bg-[#1F7AE0] hover:bg-[#1a6bc6]' : 'border-white/10 bg-white/[0.04] hover:border-white/30'}`}
+                className="group flex items-center justify-between border border-[#79C9FA]/20 bg-[#79C9FA]/[0.06] px-6 py-7 transition-colors duration-300 hover:border-[#1F7AE0] hover:bg-[#1F7AE0]"
               >
                 <span>
-                  <span className={`t-caption block !text-[10px] !leading-[14px] ${i === 0 ? 'text-white/80' : 'text-[#71B4FE]'}`}>{c.label}</span>
+                  <span className="t-caption block !text-[10px] !leading-[14px] text-[#8BE9D3] transition-colors duration-300 group-hover:text-white/80">{c.label}</span>
                   <span className="t-nav mt-0.5 block">{c.title}</span>
                 </span>
-                <span className="grid h-10 w-10 place-items-center rounded-full border border-white/60 transition group-hover:bg-white group-hover:text-[#1C3848]">
+                <span className="grid h-10 w-10 place-items-center rounded-full border border-white/60 transition-colors duration-300 group-hover:border-white group-hover:bg-white group-hover:text-[#1F7AE0]">
                   <ArrowUpRight className="h-4 w-4" />
                 </span>
               </a>
