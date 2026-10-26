@@ -143,6 +143,62 @@ function Header() {
   );
 }
 
+const N = C.products.length;
+
+/** 제품 슬라이더 — 기존 사이트처럼 카드 전체가 옆으로 밀리며 넘어가고, 새 슬라이드 글이 아래에서 올라옴 */
+function ProductSlider() {
+  const [i, setI] = useState(0);
+  const [paused, setPaused] = useState(false);
+  useEffect(() => {
+    if (paused) return;
+    const t = setTimeout(() => setI((v) => (v + 1) % N), 4500);
+    return () => clearTimeout(t);
+  }, [i, paused]);
+  const go = (d: number) => setI((v) => (v + d + N) % N);
+
+  return (
+    <div className="a-prod relative mt-14 overflow-hidden border border-slate-200 bg-white" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+      <div className="flex transition-transform duration-[900ms] ease-[cubic-bezier(.77,0,.18,1)]" style={{ transform: `translateX(-${i * 100}%)` }}>
+        {C.products.map((p, k) => (
+          <div key={p.name} className="grid w-full shrink-0 md:grid-cols-2" aria-hidden={k !== i}>
+            <ProductVisual name={p.name} image={p.image} className="aspect-[4/3] md:aspect-auto md:min-h-[440px]" />
+            {/* 활성 슬라이드가 될 때마다 key가 바뀌어 글이 다시 올라옴 */}
+            <div key={k === i ? `on-${i}` : 'off'} className="flex flex-col justify-center p-10 pb-32 md:p-14 md:pb-36">
+              {[
+                <p key="t" className="t-tag text-[#71B4FE]">{p.tag}</p>,
+                <h3 key="n" className="t-display-xl mt-4">{p.name}</h3>,
+                <p key="c" className="mt-6 whitespace-pre-line text-[20px] font-bold leading-[1.3] tracking-[-0.02em]">{p.copy}</p>,
+                <a key="l" href="#" className="t-nav mt-10 inline-flex w-fit items-center gap-2 !font-bold">
+                  제품 자세히 보기 <ArrowRight className="h-4 w-4" />
+                </a>,
+              ].map((el, n) => (
+                <div key={n} style={k === i ? { animation: `rise-in .9s cubic-bezier(.16,1,.3,1) ${0.35 + n * 0.09}s both` } : undefined}>
+                  {el}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      {/* 컨트롤은 슬라이드 위에 고정 */}
+      <div className="absolute bottom-10 left-10 flex items-center gap-4 md:bottom-14 md:left-[calc(50%+3.5rem)]">
+        <button aria-label="이전" onClick={() => go(-1)} className="grid h-11 w-11 place-items-center border border-slate-300 bg-white transition-colors hover:bg-slate-900 hover:text-white">
+          <ArrowLeft className="h-4 w-4" />
+        </button>
+        <button aria-label="다음" onClick={() => go(1)} className="grid h-11 w-11 place-items-center border border-slate-300 bg-white transition-colors hover:bg-slate-900 hover:text-white">
+          <ArrowRight className="h-4 w-4" />
+        </button>
+        <span className="t-body-md tabular-nums text-[#666]">
+          {String(i + 1).padStart(2, '0')} / {String(N).padStart(2, '0')}
+        </span>
+        <span className="relative ml-2 h-px w-20 bg-slate-200">
+          <span key={`${i}-${paused}`} className="absolute inset-y-0 left-0 bg-[#1F7AE0]" style={{ animation: paused ? undefined : 'progress 4.5s linear both', width: paused ? '0%' : undefined }} />
+        </span>
+      </div>
+    </div>
+  );
+}
+
 // 심볼 섹션 마지막 로크업 — 원본 AI 로고: 심볼↔워드마크 간격 = 심볼 폭의 11.6%
 const LOCK_SCALE = 0.55;
 function lockup() {
@@ -157,7 +213,6 @@ function lockup() {
 export default function DesignA() {
   useSmoothScroll();
   const root = useRef<HTMLDivElement>(null);
-  const [slide, setSlide] = useState(0);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -209,6 +264,9 @@ export default function DesignA() {
         .from('.a-venn-1', { scale: 0.7, duration: 1 }, 0)
         .from('.a-venn-txt', { opacity: 0, y: 30, stagger: 0.1, duration: 0.5 }, 0.6);
 
+      // 제품 카드 — 아래에서 밀려 올라옴
+      gsap.from('.a-prod', { y: 160, scale: 0.96, opacity: 0, duration: 1.4, ease: 'power4.out', scrollTrigger: { trigger: '.a-prod', start: 'top 92%' } });
+
       reveal(root.current!);
       countUp(root.current!);
       rollOdometers(root.current!);
@@ -223,7 +281,6 @@ export default function DesignA() {
     return () => ctx.revert();
   }, []);
 
-  const p = C.products[slide];
 
   return (
     <div ref={root} className="text-white" style={{ background: BG }}>
@@ -337,28 +394,7 @@ export default function DesignA() {
             </div>
             <p className="t-body-md max-w-xs text-[#666]">검증된 글로벌 의료기기 브랜드를 국내 의료 현장에 가장 빠르게 연결합니다.</p>
           </div>
-          <div className="relative mt-14 grid overflow-hidden border border-slate-200 bg-white md:grid-cols-2" data-reveal="0.1">
-            <ProductVisual key={p.name} name={p.name} image={p.image} className="aspect-[4/3] md:aspect-auto md:min-h-[440px]" />
-            <div className="flex flex-col justify-center p-10 md:p-14">
-              <p className="t-tag text-[#71B4FE]">{p.tag}</p>
-              <h3 className="t-display-xl mt-4">{p.name}</h3>
-              <p className="mt-6 whitespace-pre-line text-[20px] font-bold leading-[1.3] tracking-[-0.02em]">{p.copy}</p>
-              <a href="#" className="t-nav mt-10 inline-flex items-center gap-2 !font-bold">
-                제품 자세히 보기 <ArrowRight className="h-4 w-4" />
-              </a>
-              <div className="mt-12 flex items-center gap-4">
-                <button aria-label="이전" onClick={() => setSlide((slide + C.products.length - 1) % C.products.length)} className="grid h-11 w-11 place-items-center border border-slate-300 hover:bg-slate-900 hover:text-white">
-                  <ArrowLeft className="h-4 w-4" />
-                </button>
-                <button aria-label="다음" onClick={() => setSlide((slide + 1) % C.products.length)} className="grid h-11 w-11 place-items-center border border-slate-300 hover:bg-slate-900 hover:text-white">
-                  <ArrowRight className="h-4 w-4" />
-                </button>
-                <span className="t-body-md tabular-nums text-[#666]">
-                  {String(slide + 1).padStart(2, '0')} / {String(C.products.length).padStart(2, '0')}
-                </span>
-              </div>
-            </div>
-          </div>
+          <ProductSlider />
         </div>
       </section>
 

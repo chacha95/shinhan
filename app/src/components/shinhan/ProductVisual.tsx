@@ -21,7 +21,7 @@ export function ProductVisual({ name, image, tone = 'light', className }: Props)
       ))}
       {image ? (
         <div className="relative h-[86%] w-[70%]" style={{ animation: 'pv-float 6s ease-in-out infinite' }}>
-          <Image src={image} alt={name} fill sizes="(min-width: 768px) 40vw, 80vw" className="object-contain" />
+          <Image src={image} alt={name} fill loading="eager" sizes="(min-width: 768px) 40vw, 80vw" className="object-contain" />
         </div>
       ) : (
         <div className="relative flex flex-col items-center opacity-80" style={{ animation: 'pv-float 6s ease-in-out infinite' }}>
