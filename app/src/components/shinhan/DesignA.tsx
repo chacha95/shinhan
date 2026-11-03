@@ -147,12 +147,18 @@ export function Header({ active }: { active?: (typeof C.nav)[number] }) {
           </div>
         </div>
       </header>
-        {/* 모바일 메뉴 패널 — header의 backdrop-filter가 fixed 기준이 되지 않도록 header 밖에 둠 */}
+        {/* 모바일 메뉴 패널 — 헤더를 덮는 전체화면(Figma M/nav), header의 backdrop-filter가 fixed 기준이 되지 않도록 header 밖에 둠 */}
         <div
-          className={`fixed inset-x-0 bottom-0 top-[60px] z-50 flex flex-col justify-between px-5 pb-[30px] pt-[26px] transition-[opacity,transform] duration-500 ease-[cubic-bezier(.16,1,.3,1)] md:hidden ${open ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-3 opacity-0'}`}
+          className={`fixed inset-0 z-[60] flex flex-col px-5 pb-[30px] transition-[opacity,transform] duration-500 ease-[cubic-bezier(.16,1,.3,1)] md:hidden ${open ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-3 opacity-0'}`}
           style={{ background: 'radial-gradient(224.94% 111.64% at 100% 0%, rgba(113,180,254,.12) 0%, rgba(113,180,254,0) 36%), #092A2F' }}
         >
-          <nav className="text-white">
+          <div className="flex h-[60px] shrink-0 items-center justify-end">
+            <button type="button" aria-label={C.ui.menuClose} onClick={() => setOpen(false)} className="relative grid h-10 w-10 place-items-center">
+              <span className="absolute h-px w-5 rotate-45 bg-white" />
+              <span className="absolute h-px w-5 -rotate-45 bg-white" />
+            </button>
+          </div>
+          <nav className="mt-[26px] text-white">
             {C.nav.map((n, i) => (
               <Link
                 key={n}
@@ -169,6 +175,7 @@ export function Header({ active }: { active?: (typeof C.nav)[number] }) {
               </Link>
             ))}
           </nav>
+          <LangSwitch className="t-caption mt-auto self-end pb-4 !leading-4 tracking-[1px] text-white" />
           <Link href={href('/contact#form')} onClick={() => setOpen(false)} className="flex items-center justify-between border border-white/30 px-4 py-4 text-[15px] font-bold leading-[22px] text-white">
             {C.hero.cta} <ArrowUpRight className="h-4 w-4" />
           </Link>
