@@ -372,7 +372,7 @@ export default function DesignA() {
             <span className="h-px w-9 bg-[#71B4FE]" />
             {C.hero.eyebrow}
           </p>
-          <h1 className="t-display-lg">
+          <h1 className="t-display-lg max-md:!text-[32px] max-md:!leading-[42px]">
             <span className="a-hero-line block overflow-hidden">
               <span className="block">
                 <em className="font-bold not-italic tracking-[-0.02em] text-[#71B4FE]">전문성</em>을 이어,
@@ -384,8 +384,8 @@ export default function DesignA() {
               </span>
             </span>
           </h1>
-          <p className="a-hero-fade t-heading-sm mt-8 text-white/80">{C.hero.desc}</p>
-          <Link href="/contact#form" className="a-hero-fade mt-12 inline-flex h-[52px] w-[160px] items-center justify-center gap-5 border border-white/[0.32] text-[15px] md:h-[58px] md:w-[178px] md:text-[18px] font-bold leading-[28px] hover:bg-white hover:text-[#13243a]">
+          <p className="a-hero-fade t-heading-sm mt-8 text-white/80 max-md:mt-5 max-md:!text-[16px] max-md:!leading-[26px]">{C.hero.desc}</p>
+          <Link href="/contact#form" className="a-hero-fade mt-12 inline-flex h-[52px] w-[160px] items-center justify-center gap-5 border border-white/[0.32] text-[14px] md:h-[58px] md:w-[178px] md:text-[18px] font-bold leading-[28px] hover:bg-white hover:text-[#13243a]">
             {C.hero.cta} <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>
@@ -558,27 +558,27 @@ export default function DesignA() {
 }
 
 export function Footer({ tone = 'dark' }: { tone?: 'dark' | 'light' }) {
-  // Figma 푸터: #1A2D3B, 로고 + 메뉴 / 소개 문구 + 저작권
+  // Figma 푸터: #1A2D3B, 로고 + 메뉴 한 줄(모바일도) / 구분선 / 소개 문구 + 저작권
   const dark = tone === 'dark';
   return (
-    <footer className={`px-6 py-12 ${dark ? 'bg-[#1A2D3B] text-white' : 'bg-white text-[#0d1b2a]'}`}>
+    <footer className={`px-5 pb-9 pt-12 md:px-6 md:py-12 ${dark ? 'bg-[#1A2D3B] text-white' : 'bg-white text-[#0d1b2a]'}`}>
       <BackToTop />
       <div className="mx-auto max-w-[1240px]">
-        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <Link href="/" aria-label="신한네트웍스 홈">
+        <div className={`flex items-center justify-between gap-7 border-b pb-[30px] ${dark ? 'border-white/[0.28]' : 'border-slate-200'}`}>
+          <Link href="/" aria-label="신한네트웍스 홈" className="shrink-0">
             <Wordmark />
           </Link>
-          <nav className={`t-nav flex justify-between max-md:!text-[12px] md:justify-start md:gap-8 ${dark ? 'text-white/80' : 'text-slate-600'}`}>
+          <nav className={`t-nav flex gap-6 max-md:!text-[12px] max-md:!leading-[18px] md:gap-8 ${dark ? 'text-white/80' : 'text-slate-600'}`}>
             {C.footerNav.map((n) => (
-              <Link key={n.label} href={n.href} className="transition-colors hover:text-[#71B4FE]">
+              <Link key={n.label} href={n.href} className="whitespace-nowrap transition-colors hover:text-[#71B4FE]">
                 {n.label}
               </Link>
             ))}
           </nav>
         </div>
-        <div className={`mt-10 flex flex-col gap-2 border-t pt-6 md:flex-row md:justify-between ${dark ? 'border-white/15 text-white/50' : 'border-slate-200 text-slate-500'}`}>
-          <p className="t-body-sm">{C.hero.desc}</p>
-          <p className="t-body-sm">© 2025 SHINHAN NETWORKS. ALL RIGHTS RESERVED.</p>
+        <div className={`flex flex-col gap-1 pt-6 md:flex-row md:justify-between ${dark ? 'text-white/50' : 'text-slate-500'}`}>
+          <p className="t-body-sm max-md:!text-[10px] max-md:!leading-[16px]">{C.hero.desc}</p>
+          <p className="t-body-sm max-md:!text-[9px] max-md:!leading-[14px]">© 2025 SHINHAN NETWORKS. ALL RIGHTS RESERVED.</p>
         </div>
       </div>
     </footer>
