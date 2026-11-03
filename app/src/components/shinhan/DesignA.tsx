@@ -42,7 +42,7 @@ function HeroRings() {
   // 동심원 스테이지 — Figma 'Container 683×683' 레이어 값 그대로
   const at = (size: number) => ({ width: u(size), height: u(size), left: u(341.5 - size / 2), top: u(341.5 - size / 2) });
   return (
-    <div className="a-stage pointer-events-none absolute left-1/2 top-[52.5%] z-0 opacity-40 lg:left-[63.6%] lg:opacity-100">
+    <div className="a-stage pointer-events-none absolute left-1/2 top-[27%] z-0 scale-[.62] lg:left-[63.6%] lg:top-[52.5%] lg:scale-100">
       <div className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ width: u(683), height: u(683), boxShadow: `0 0 ${u(104.7)} ${SKY}0.1)` }}>
         {/* 사선 2개 */}
         <span className="absolute left-1/2 top-1/2" style={{ width: u(628.31), height: u(1.16), translate: '-50% -50%', rotate: '-12deg', background: `linear-gradient(90deg, ${SKY}0) 0%, ${SKY}0.25) 50%, ${SKY}0) 100%)` }} />
@@ -77,7 +77,7 @@ function HeroRings() {
         </span>
         {/* GLOBAL NETWORK */}
         <div
-          className="a-widget absolute hidden flex-col lg:flex"
+          className="a-widget absolute flex flex-col"
           style={{ left: u(485.26), top: u(120.34), width: u(183.84), height: u(103.76), padding: `${u(17.45)} ${u(19.78)}`, background: 'rgba(4,33,40,.74)', border: `${u(1.16)} solid ${SKY}0.25)`, boxShadow: `0 ${u(16.3)} ${u(46.5)} rgba(0,0,0,.16)` }}
         >
           <p className="whitespace-nowrap font-bold text-[#71B4FE]" style={{ fontSize: u(11.64), lineHeight: u(12), letterSpacing: u(1.47) }}>GLOBAL NETWORK</p>
@@ -90,7 +90,7 @@ function HeroRings() {
         </div>
         {/* MEDICAL TECHNOLOGY */}
         <div
-          className="a-widget absolute hidden flex-col justify-between lg:flex"
+          className="a-widget absolute flex flex-col justify-between"
           style={{ left: u(6.93), top: u(465.42), width: u(197.8), height: u(90.96), padding: `${u(16.5)} ${u(26.76)}`, background: 'rgba(4,33,40,.74)', border: `${u(1.16)} solid ${SKY}0.25)`, boxShadow: `0 ${u(16.3)} ${u(46.5)} rgba(0,0,0,.16)` }}
         >
           <p className="whitespace-nowrap font-bold text-[#71B4FE]" style={{ fontSize: u(11.64), lineHeight: u(12), letterSpacing: u(1.47) }}>MEDICAL TECHNOLOGY</p>
@@ -109,28 +109,69 @@ function HeroRings() {
   );
 }
 
+const navSub: Record<(typeof C.nav)[number], string> = { ABOUT: '신한네트웍스 소개', PRODUCT: '제품 및 솔루션', CONTACT: '비즈니스 문의' };
+
 export function Header({ active }: { active?: (typeof C.nav)[number] }) {
-  // 11/03: 헤더 FIXED — 스크롤해도 항상 상단 고정
+  // 11/03: 헤더 FIXED — 스크롤해도 항상 상단 고정. 모바일은 60px + 햄버거 메뉴(Figma M/nav)
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+    return () => {
+      document.documentElement.style.overflow = '';
+    };
+  }, [open]);
   return (
-    <header className="a-header fixed inset-x-0 top-0 z-50 border-b border-white/15 bg-[#273E4E]/90 backdrop-blur-[12px]">
-      <div className="mx-auto flex h-[77px] max-w-[1240px] items-center justify-between px-6 text-white">
-        <Link href="/" aria-label="신한네트웍스 홈">
-          <Wordmark />
-        </Link>
-        <div className="flex items-center gap-10">
-          <nav className="t-nav hidden gap-[34px] text-white md:flex">
-            {C.nav.map((n) => (
-              <Link key={n} href={C.routes[n]} className={`transition-colors hover:text-[#71B4FE] ${active === n ? 'text-[#71B4FE]' : ''}`}>
-                {n}
+    <>
+      <header className="a-header fixed inset-x-0 top-0 z-50 border-b border-white/15 bg-[#273E4E]/90 backdrop-blur-[12px]">
+        <div className="mx-auto flex h-[60px] max-w-[1240px] items-center justify-between px-5 text-white md:h-[77px] md:px-6">
+          <Link href="/" aria-label="신한네트웍스 홈" onClick={() => setOpen(false)}>
+            <Wordmark />
+          </Link>
+          <div className="flex items-center gap-10">
+            <nav className="t-nav hidden gap-[34px] text-white md:flex">
+              {C.nav.map((n) => (
+                <Link key={n} href={C.routes[n]} className={`transition-colors hover:text-[#71B4FE] ${active === n ? 'text-[#71B4FE]' : ''}`}>
+                  {n}
+                </Link>
+              ))}
+            </nav>
+            <Link href="/contact#form" className="t-button hidden items-center gap-4 border border-white/40 px-5 py-2 transition-colors hover:bg-white hover:text-[#273E4E] md:inline-flex">
+              {C.hero.cta} <ArrowUpRight className="h-4 w-4" />
+            </Link>
+            <button type="button" aria-label={open ? '메뉴 닫기' : '메뉴 열기'} aria-expanded={open} onClick={() => setOpen((v) => !v)} className="relative grid h-10 w-10 place-items-center md:hidden">
+              <span className={`absolute h-px w-5 bg-white transition-transform duration-300 ${open ? 'rotate-45' : '-translate-y-[4px]'}`} />
+              <span className={`absolute h-px w-5 bg-white transition-transform duration-300 ${open ? '-rotate-45' : 'translate-y-[4px]'}`} />
+            </button>
+          </div>
+        </div>
+      </header>
+        {/* 모바일 메뉴 패널 — header의 backdrop-filter가 fixed 기준이 되지 않도록 header 밖에 둠 */}
+        <div
+          className={`fixed inset-x-0 bottom-0 top-[60px] z-50 flex flex-col justify-between px-5 pb-[30px] pt-[26px] transition-[opacity,transform] duration-500 ease-[cubic-bezier(.16,1,.3,1)] md:hidden ${open ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-3 opacity-0'}`}
+          style={{ background: 'radial-gradient(224.94% 111.64% at 100% 0%, rgba(113,180,254,.12) 0%, rgba(113,180,254,0) 36%), #092A2F' }}
+        >
+          <nav className="text-white">
+            {C.nav.map((n, i) => (
+              <Link
+                key={n}
+                href={C.routes[n]}
+                onClick={() => setOpen(false)}
+                className={`flex h-24 items-center justify-between border-white/[0.14] px-3 ${i === 0 ? 'border-y' : 'border-b'}`}
+                style={open ? { animation: `rise-in .7s cubic-bezier(.16,1,.3,1) ${0.08 + i * 0.07}s both` } : undefined}
+              >
+                <span>
+                  <span className={`block text-[22px] font-bold leading-[34px] ${active === n ? 'text-[#71B4FE]' : ''}`}>{n}</span>
+                  <span className="block text-[12px] leading-[18px] text-white/50">{navSub[n]}</span>
+                </span>
+                <ArrowUpRight className="h-5 w-5" />
               </Link>
             ))}
           </nav>
-          <Link href="/contact#form" className="t-button hidden items-center gap-4 border border-white/40 px-5 py-2 transition-colors hover:bg-white hover:text-[#273E4E] sm:inline-flex">
+          <Link href="/contact#form" onClick={() => setOpen(false)} className="flex items-center justify-between border border-white/30 px-4 py-4 text-[15px] font-bold leading-[22px] text-white">
             {C.hero.cta} <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>
-      </div>
-    </header>
+    </>
   );
 }
 
@@ -326,7 +367,7 @@ export default function DesignA() {
         </div>
         <WaveField cx={0.64} cy={0.52} circle={false} interactive={false} className="absolute inset-0 h-full w-full opacity-15 mix-blend-screen" />
         <HeroRings />
-        <div className="relative z-10 mx-auto flex h-full max-w-[1240px] flex-col justify-center px-6 pt-10">
+        <div className="relative z-10 mx-auto flex h-full max-w-[1240px] flex-col justify-end px-5 pb-28 pt-10 md:px-6 lg:justify-center lg:pb-0">
           <p className="a-hero-fade t-eyebrow mb-7 flex items-center gap-3 !leading-[15px] text-[#71B4FE]">
             <span className="h-px w-9 bg-[#71B4FE]" />
             {C.hero.eyebrow}
@@ -344,12 +385,12 @@ export default function DesignA() {
             </span>
           </h1>
           <p className="a-hero-fade t-heading-sm mt-8 text-white/80">{C.hero.desc}</p>
-          <Link href="/contact#form" className="a-hero-fade mt-12 inline-flex h-[58px] w-[178px] items-center justify-center gap-5 border border-white/[0.32] text-[18px] font-bold leading-[28px] hover:bg-white hover:text-[#13243a]">
+          <Link href="/contact#form" className="a-hero-fade mt-12 inline-flex h-[52px] w-[160px] items-center justify-center gap-5 border border-white/[0.32] text-[15px] md:h-[58px] md:w-[178px] md:text-[18px] font-bold leading-[28px] hover:bg-white hover:text-[#13243a]">
             {C.hero.cta} <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>
         <div className="a-hero-fade absolute inset-x-0 bottom-0 z-10 mx-auto max-w-[1240px] px-6">
-          <div className="t-caption flex h-[63px] items-center justify-between border-t border-white/70 !leading-4 text-white/70">
+          <div className="t-caption flex h-[63px] items-center justify-between border-t border-white/70 !leading-4 text-white/70 max-md:!text-[8px] max-md:!tracking-[1px]">
             <span>SHINHAN NETWORKS · MEDICAL DEVICE PARTNER</span>
             <span className="flex items-center gap-3">
               <span className="tracking-[1.62px]">SCROLL</span>
@@ -402,11 +443,11 @@ export default function DesignA() {
             />
           ))}
           <div className="a-sym-mark relative">
-            <Symbol className="h-[210px] w-[224px]" outline lineClassName="a-sym-line" />
+            <Symbol className="h-[150px] w-[160px] md:h-[210px] md:w-[224px]" outline lineClassName="a-sym-line" />
           </div>
           {/* 세로 가운데는 flex로, 가로 위치는 GSAP x로 */}
           <div className="a-sym-word absolute inset-y-0 left-1/2 flex items-center">
-            <LogoType className="h-[80px] w-auto" />
+            <LogoType className="h-[44px] w-auto md:h-[80px]" />
           </div>
         </div>
         <div className="t-caption absolute bottom-[14%] flex gap-10 text-white/70">
@@ -422,7 +463,7 @@ export default function DesignA() {
       <VideoSection />
 
       {/* PRODUCT */}
-      <section className="relative bg-[#F3F6F9] px-6 py-[120px] text-black">
+      <section className="relative bg-[#F3F6F9] px-6 py-[72px] md:py-[120px] text-black">
         <div className="mx-auto max-w-[1180px]">
           <div className="flex flex-wrap items-end justify-between gap-6" data-reveal>
             <div>
@@ -436,12 +477,12 @@ export default function DesignA() {
       </section>
 
       {/* PARTNERSHIP — Figma: #1C3848 + 큰 반투명 링 */}
-      <section className="a-part relative overflow-hidden bg-[#1C3848] px-6 py-[120px]">
+      <section className="a-part relative overflow-hidden bg-[#1C3848] px-6 py-[72px] md:py-[120px]">
         <div className="a-part-circle pointer-events-none absolute left-[53%] top-[18%] aspect-square w-[min(980px,72vw)] -translate-x-1/2 -translate-y-1/2 rounded-full border-[min(90px,6vw)] border-white/[0.045]" />
         <div className="relative mx-auto grid max-w-[1240px] items-center gap-12 md:grid-cols-[1fr_460px]">
           <div data-reveal>
             <p className="t-eyebrow text-[#71B4FE]">{C.partnership.eyebrow}</p>
-            <h2 className="t-display-md mt-6">
+            <h2 className="t-display-md mt-6 max-md:!text-[40px] max-md:!font-normal max-md:!leading-[52px]">
               {C.partnership.title[0]}
               <br />
               {C.partnership.title[1]}
@@ -470,11 +511,14 @@ export default function DesignA() {
       </section>
 
       {/* BRAND IDENTITY — Figma 11/03: 흰 배경 카드 3개 */}
-      <section className="bg-white px-6 py-[120px] text-black">
+      <section className="bg-white px-6 py-[72px] md:py-[120px] text-black">
         <div className="mx-auto max-w-[1240px]">
           <div className="flex flex-wrap items-end justify-between gap-6" data-reveal>
             <div>
-              <p className="t-eyebrow text-[#1F7AE0]">{C.values.eyebrow}</p>
+              <p className="t-eyebrow text-[#1F7AE0]">
+                <span className="md:hidden">WHY SHINHAN</span>
+                <span className="hidden md:inline">{C.values.eyebrow}</span>
+              </p>
               <h2 className="t-display-md mt-3">{C.values.title}</h2>
             </div>
             <p className="t-body-md max-w-[340px] text-[#666]">{C.values.desc}</p>
@@ -524,7 +568,7 @@ export function Footer({ tone = 'dark' }: { tone?: 'dark' | 'light' }) {
           <Link href="/" aria-label="신한네트웍스 홈">
             <Wordmark />
           </Link>
-          <nav className={`t-nav flex gap-8 ${dark ? 'text-white/80' : 'text-slate-600'}`}>
+          <nav className={`t-nav flex justify-between max-md:!text-[12px] md:justify-start md:gap-8 ${dark ? 'text-white/80' : 'text-slate-600'}`}>
             {C.footerNav.map((n) => (
               <Link key={n.label} href={n.href} className="transition-colors hover:text-[#71B4FE]">
                 {n.label}

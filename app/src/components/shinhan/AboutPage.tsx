@@ -42,7 +42,7 @@ export default function AboutPage() {
       />
 
       {/* OUR COMPANY */}
-      <section className="bg-[#F8FBFF] px-6 py-[128px]">
+      <section className="bg-[#F8FBFF] px-6 py-[72px] md:py-[128px]">
         <div className="mx-auto max-w-[1200px]">
           <SectionHead
             eyebrow="OUR COMPANY"
@@ -63,7 +63,7 @@ export default function AboutPage() {
       </section>
 
       {/* OUR VISION */}
-      <section className="bg-white px-6 py-[128px]">
+      <section className="bg-white px-6 py-[72px] md:py-[128px]">
         <div className="mx-auto max-w-[1200px]">
           <SectionHead
             eyebrow="OUR VISION"
@@ -92,7 +92,7 @@ export default function AboutPage() {
       </section>
 
       {/* FIND US */}
-      <section className="bg-[#F8FBFF] px-6 py-[128px]">
+      <section className="bg-[#F8FBFF] px-6 py-[72px] md:py-[128px]">
         <div className="mx-auto grid max-w-[1200px] overflow-hidden border border-[#E3E9F0] bg-white md:grid-cols-[1.1fr_1fr]" data-reveal>
           <div className="relative min-h-[360px]">
             <iframe

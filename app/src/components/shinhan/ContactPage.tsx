@@ -34,7 +34,7 @@ export default function ContactPage() {
       />
 
       {/* CONTACT FORM — 비즈니스 문의 버튼은 /contact#form 으로 바로 연결 */}
-      <section id="form" className="scroll-mt-[77px] bg-white px-6 py-[120px]">
+      <section id="form" className="scroll-mt-[60px] md:scroll-mt-[77px] bg-white px-6 py-[72px] md:py-[120px]">
         <div className="mx-auto grid max-w-[1200px] gap-14 md:grid-cols-[1fr_1.3fr]">
           <div data-reveal>
             <p className="t-eyebrow text-[#1F7AE0]">CONTACT FORM</p>
@@ -82,9 +82,9 @@ export default function ContactPage() {
                 내용보기
               </button>
             </div>
-            <div className="col-span-2 flex items-center justify-end gap-6">
+            <div className="col-span-2 flex flex-col-reverse items-stretch justify-end gap-4 md:flex-row md:items-center md:gap-6">
               {sent && <p className="t-body-sm text-[#1F7AE0]">시안 단계라 실제 전송은 아직 연결되지 않았습니다.</p>}
-              <button type="submit" className="t-button inline-flex items-center gap-4 bg-[#1F7AE0] px-8 py-4 text-white transition-colors hover:bg-[#1a6bc6]">
+              <button type="submit" className="t-button inline-flex w-full items-center justify-center gap-4 bg-[#1F7AE0] px-8 py-4 text-white transition-colors hover:bg-[#1a6bc6] md:w-auto">
                 문의 보내기 <ArrowUpRight className="h-4 w-4" />
               </button>
             </div>
@@ -93,7 +93,7 @@ export default function ContactPage() {
       </section>
 
       {/* DIRECT CONTACT */}
-      <section className="bg-[#F8FBFF] px-6 py-[120px]">
+      <section className="bg-[#F8FBFF] px-6 py-[72px] md:py-[120px]">
         <div className="mx-auto grid max-w-[1200px] items-center gap-14 md:grid-cols-2">
           <div data-reveal>
             <p className="t-eyebrow text-[#1F7AE0]">DIRECT CONTACT</p>

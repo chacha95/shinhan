@@ -18,14 +18,14 @@ export default function ProductPage() {
       <SubHero eyebrow="ABOUT PRODUCT" title="제품 소개" desc={'의료기기 분야의 전문성을 바탕으로\n제품과 고객을 연결합니다.'} />
 
       {/* 제품 슬라이더 */}
-      <section className="bg-white px-6 py-[120px]">
+      <section className="bg-white px-6 py-[72px] md:py-[120px]">
         <div className="mx-auto max-w-[1180px]">
           <ProductSlider cta={{ label: '제품 문의하기', href: '/contact#form' }} />
         </div>
       </section>
 
       {/* PRODUCT FEATURES */}
-      <section className="bg-[#F8FBFF] px-6 py-[128px]">
+      <section className="bg-[#F8FBFF] px-6 py-[72px] md:py-[128px]">
         <div className="mx-auto max-w-[1200px]">
           <SectionHead
             eyebrow="PRODUCT FEATURES"
@@ -52,7 +52,7 @@ export default function ProductPage() {
       </section>
 
       {/* OFFICIAL RESOURCES */}
-      <section className="bg-white px-6 py-[128px]">
+      <section className="bg-white px-6 py-[72px] md:py-[128px]">
         <div className="mx-auto max-w-[1200px]">
           <SectionHead eyebrow="OFFICIAL RESOURCES" title={'제품을 더 자세히\n알아보세요.'} desc={'공식 브랜드 콘텐츠와 제품 관련 자료를 통해\n필요한 정보를 확인할 수 있습니다.'} />
           <div className="mt-16 grid md:grid-cols-2">
