@@ -70,3 +70,102 @@ export const company = {
   fax: '02) 543-5214',
   addr: '서울특별시 서초구 양재천로19길 10 (양재동, KK빌딩)',
 };
+
+// ── 국문/영문 공통 콘텐츠 (메인·헤더·푸터) — 영문은 Figma 'PC 영문'/'모바일 영문' 기준
+type Line = { t: string; hl?: boolean }[];
+type Lang = {
+  nav: typeof nav;
+  routes: typeof routes;
+  navSub: Record<(typeof nav)[number], string>;
+  footerNav: typeof footerNav;
+  hero: typeof hero & { lines: Line[] };
+  philosophy: typeof philosophy & { lines: Line[] };
+  product: { title: string; desc: string; more: string; inquire: string };
+  products: typeof products;
+  partnership: typeof partnership;
+  values: typeof values & { eyebrowMobile: string; about: string };
+  ui: { home: string; menuOpen: string; menuClose: string; prev: string; next: string; soundOn: string; soundOff: string };
+};
+
+export const ko: Lang = {
+  nav,
+  routes,
+  navSub: { ABOUT: '신한네트웍스 소개', PRODUCT: '제품 및 솔루션', CONTACT: '비즈니스 문의' },
+  footerNav,
+  hero: {
+    ...hero,
+    lines: [
+      [{ t: '전문성', hl: true }, { t: '을 이어,' }],
+      [{ t: '새로운 가치', hl: true }, { t: '를 ' }, { t: '연결', hl: true }, { t: '합니다.' }],
+    ],
+  },
+  philosophy: { ...philosophy, lines: [[{ t: philosophy.title[0] }], [{ t: philosophy.title[1], hl: true }]] },
+  product: { title: 'Featured Product', desc: '검증된 글로벌 의료기기 브랜드와 함께 더 나은 의료 경험을 만들어갑니다.', more: '제품 자세히 보기', inquire: '제품 문의하기' },
+  products,
+  partnership,
+  values: { ...values, eyebrowMobile: 'WHY SHINHAN', about: '회사 소개' },
+  ui: { home: '신한네트웍스 홈', menuOpen: '메뉴 열기', menuClose: '메뉴 닫기', prev: '이전', next: '다음', soundOn: '소리 켜기', soundOff: '소리 끄기' },
+};
+
+const enProductCopy = 'Setting a New Standard in Healthcare Through Innovative Technology.';
+const enProductDesc =
+  'INMODE is a global medical device brand that delivers innovative energy-based technologies and refined solutions for a better experience for both practitioners and patients.';
+
+export const en: Lang = {
+  nav,
+  routes,
+  navSub: { ABOUT: 'About Shinhan Networks', PRODUCT: 'Products & Solutions', CONTACT: 'Business Inquiry' },
+  footerNav: [
+    { label: 'About Us', href: '/about' },
+    { label: 'Products', href: '/product' },
+    { label: 'Contact', href: '/contact#form' },
+  ],
+  hero: {
+    eyebrow: 'MEDICAL EXPERTISE, CONNECTED',
+    title: ['Connecting Expertise,', 'Creating New Value.'],
+    desc: 'Shinhan Networks connects medical device expertise with global brands.',
+    cta: 'Business Inquiry',
+    lines: [
+      [{ t: 'Connecting', hl: true }, { t: ' Expertise,' }],
+      [{ t: 'Creating ' }, { t: 'New Value', hl: true }, { t: '.' }],
+    ],
+  },
+  philosophy: {
+    eyebrow: 'CONNECTING VALUE · CREATING TOMORROW',
+    title: ['Connecting the Value of Medical Devices', 'to a Better Tomorrow.'],
+    desc: 'Drawing on our expertise and experience in the medical device industry, Shinhan Networks connects global brands with healthcare professionals. We deliver new value to our customers through reliable products and comprehensive services.',
+    lines: [
+      [{ t: 'Connecting the ' }, { t: 'Value of Medical Devices', hl: true }],
+      [{ t: 'to a ' }, { t: 'Better Tomorrow', hl: true }, { t: '.' }],
+    ],
+  },
+  product: {
+    title: 'Featured Product',
+    desc: 'We create better healthcare experiences in partnership with trusted global medical device brands.',
+    more: 'MORE',
+    inquire: 'Inquire About This Product',
+  },
+  products: [
+    { name: 'INMODE RF', image: '/products/inmode-rf.webp', tag: 'INMODE', copy: enProductCopy, desc: enProductDesc },
+    { name: 'NEW INMODE HANDSFREE', image: '/products/evoke.webp', tag: 'INMODE EVOKE', copy: enProductCopy, desc: enProductDesc },
+  ],
+  partnership: {
+    eyebrow: 'PARTNERSHIP',
+    title: ['Creating New Opportunities', 'Together.'],
+    desc: 'From global brand partnerships and overseas business to product resource requests,\nour specialists provide accurate and prompt guidance.',
+    cards: [{ label: 'BUSINESS', title: 'Partnership Inquiry' }],
+  },
+  values: {
+    eyebrow: 'BRAND IDENTITY',
+    eyebrowMobile: 'WHY SHINHAN',
+    title: 'Creating Value Through the Power of Connection.',
+    desc: 'Expertise, a strong network, and responsible service — these are the core values upheld by Shinhan Networks.',
+    about: 'About Us',
+    items: [
+      { en: 'Expertise', ko: 'Expertise and Experience', desc: 'With deep industry knowledge and extensive experience, we communicate the true value of every product.' },
+      { en: 'Network', ko: 'Connecting Global Brands with Local Healthcare', desc: 'We seamlessly connect world-class medical brands with Korea’s healthcare market to create new possibilities.' },
+      { en: 'Service', ko: 'Prompt and Reliable Service', desc: 'We support every stage of your business, from reliable product supply and responsive assistance to the provision of professional resources.' },
+    ],
+  },
+  ui: { home: 'Shinhan Networks home', menuOpen: 'Open menu', menuClose: 'Close menu', prev: 'Previous', next: 'Next', soundOn: 'Unmute', soundOff: 'Mute' },
+};

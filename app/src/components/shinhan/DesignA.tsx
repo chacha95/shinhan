@@ -10,6 +10,7 @@ import { BackToTop } from './BackToTop';
 import { LogoType, Symbol, Wordmark } from './Symbol';
 import { ProductVisual } from './ProductVisual';
 import * as C from './content';
+import { useContent, useHref, useLang, LangSwitch } from './i18n';
 
 const BG = '#08131f';
 
@@ -109,10 +110,10 @@ function HeroRings() {
   );
 }
 
-const navSub: Record<(typeof C.nav)[number], string> = { ABOUT: '신한네트웍스 소개', PRODUCT: '제품 및 솔루션', CONTACT: '비즈니스 문의' };
-
 export function Header({ active }: { active?: (typeof C.nav)[number] }) {
   // 11/03: 헤더 FIXED — 스크롤해도 항상 상단 고정. 모바일은 60px + 햄버거 메뉴(Figma M/nav)
+  const C = useContent();
+  const href = useHref();
   const [open, setOpen] = useState(false);
   useEffect(() => {
     document.documentElement.style.overflow = open ? 'hidden' : '';
@@ -124,21 +125,22 @@ export function Header({ active }: { active?: (typeof C.nav)[number] }) {
     <>
       <header className="a-header fixed inset-x-0 top-0 z-50 border-b border-white/15 bg-[#273E4E]/90 backdrop-blur-[12px]">
         <div className="mx-auto flex h-[60px] max-w-[1240px] items-center justify-between px-5 text-white md:h-[77px] md:px-6">
-          <Link href="/" aria-label="신한네트웍스 홈" onClick={() => setOpen(false)}>
+          <Link href={href('/')} aria-label={C.ui.home} onClick={() => setOpen(false)}>
             <Wordmark />
           </Link>
-          <div className="flex items-center gap-10">
+          <div className="flex items-center gap-5 md:gap-10">
             <nav className="t-nav hidden gap-[34px] text-white md:flex">
               {C.nav.map((n) => (
-                <Link key={n} href={C.routes[n]} className={`transition-colors hover:text-[#71B4FE] ${active === n ? 'text-[#71B4FE]' : ''}`}>
+                <Link key={n} href={href(C.routes[n])} className={`transition-colors hover:text-[#71B4FE] ${active === n ? 'text-[#71B4FE]' : ''}`}>
                   {n}
                 </Link>
               ))}
             </nav>
-            <Link href="/contact#form" className="t-button hidden items-center gap-4 border border-white/40 px-5 py-2 transition-colors hover:bg-white hover:text-[#273E4E] md:inline-flex">
+            <LangSwitch className="t-caption !leading-4 tracking-[1px] text-white" />
+            <Link href={href('/contact#form')} className="t-button hidden items-center gap-4 border border-white/40 px-5 py-2 transition-colors hover:bg-white hover:text-[#273E4E] md:inline-flex">
               {C.hero.cta} <ArrowUpRight className="h-4 w-4" />
             </Link>
-            <button type="button" aria-label={open ? '메뉴 닫기' : '메뉴 열기'} aria-expanded={open} onClick={() => setOpen((v) => !v)} className="relative grid h-10 w-10 place-items-center md:hidden">
+            <button type="button" aria-label={open ? C.ui.menuClose : C.ui.menuOpen} aria-expanded={open} onClick={() => setOpen((v) => !v)} className="relative grid h-10 w-10 place-items-center md:hidden">
               <span className={`absolute h-px w-5 bg-white transition-transform duration-300 ${open ? 'rotate-45' : '-translate-y-[4px]'}`} />
               <span className={`absolute h-px w-5 bg-white transition-transform duration-300 ${open ? '-rotate-45' : 'translate-y-[4px]'}`} />
             </button>
@@ -154,20 +156,20 @@ export function Header({ active }: { active?: (typeof C.nav)[number] }) {
             {C.nav.map((n, i) => (
               <Link
                 key={n}
-                href={C.routes[n]}
+                href={href(C.routes[n])}
                 onClick={() => setOpen(false)}
                 className={`flex h-24 items-center justify-between border-white/[0.14] px-3 ${i === 0 ? 'border-y' : 'border-b'}`}
                 style={open ? { animation: `rise-in .7s cubic-bezier(.16,1,.3,1) ${0.08 + i * 0.07}s both` } : undefined}
               >
                 <span>
                   <span className={`block text-[22px] font-bold leading-[34px] ${active === n ? 'text-[#71B4FE]' : ''}`}>{n}</span>
-                  <span className="block text-[12px] leading-[18px] text-white/50">{navSub[n]}</span>
+                  <span className="block text-[12px] leading-[18px] text-white/50">{C.navSub[n]}</span>
                 </span>
                 <ArrowUpRight className="h-5 w-5" />
               </Link>
             ))}
           </nav>
-          <Link href="/contact#form" onClick={() => setOpen(false)} className="flex items-center justify-between border border-white/30 px-4 py-4 text-[15px] font-bold leading-[22px] text-white">
+          <Link href={href('/contact#form')} onClick={() => setOpen(false)} className="flex items-center justify-between border border-white/30 px-4 py-4 text-[15px] font-bold leading-[22px] text-white">
             {C.hero.cta} <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>
@@ -177,6 +179,7 @@ export function Header({ active }: { active?: (typeof C.nav)[number] }) {
 
 /** 11/03: 영상 영역 전체화면 — 작은 창에서 화면 가득 펼쳐지며 재생 */
 function VideoSection() {
+  const C = useContent();
   const video = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
   useEffect(() => {
@@ -204,7 +207,7 @@ function VideoSection() {
         type="button"
         onClick={() => setMuted((m) => !m)}
         className="t-caption absolute bottom-8 right-8 z-10 border border-white/40 px-4 py-2.5 text-white/90 backdrop-blur-sm transition-colors hover:bg-white hover:text-[#08131f]"
-        aria-label={muted ? '소리 켜기' : '소리 끄기'}
+        aria-label={muted ? C.ui.soundOn : C.ui.soundOff}
       >
         {muted ? 'SOUND OFF' : 'SOUND ON'}
       </button>
@@ -212,17 +215,19 @@ function VideoSection() {
   );
 }
 
-const N = C.products.length;
-
 /** 제품 슬라이더 — 기존 사이트처럼 카드 전체가 옆으로 밀리며 넘어가고, 새 슬라이드 글이 아래에서 올라옴 */
-export function ProductSlider({ cta = { label: '제품 자세히 보기', href: 'https://inmode.co.kr/' } }: { cta?: { label: string; href: string } }) {
+export function ProductSlider({ cta: ctaProp }: { cta?: { label: string; href: string } }) {
+  const C = useContent();
+  const href = useHref();
+  const N = C.products.length;
+  const cta = ctaProp ?? { label: C.product.more, href: 'https://inmode.co.kr/' };
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
   useEffect(() => {
     if (paused) return;
     const t = setTimeout(() => setI((v) => (v + 1) % N), 4500);
     return () => clearTimeout(t);
-  }, [i, paused]);
+  }, [i, paused, N]);
   const go = (d: number) => setI((v) => (v + d + N) % N);
 
   return (
@@ -243,7 +248,7 @@ export function ProductSlider({ cta = { label: '제품 자세히 보기', href: 
                     {cta.label} <ArrowUpRight className="h-4 w-4" />
                   </a>
                 ) : (
-                  <Link key="l" href={cta.href} className="t-nav mt-10 inline-flex w-fit items-center gap-2 !font-bold">
+                  <Link key="l" href={href(cta.href)} className="t-nav mt-10 inline-flex w-fit items-center gap-2 !font-bold">
                     {cta.label} <ArrowRight className="h-4 w-4" />
                   </Link>
                 ),
@@ -258,10 +263,10 @@ export function ProductSlider({ cta = { label: '제품 자세히 보기', href: 
       </div>
       {/* 컨트롤은 슬라이드 위에 고정 */}
       <div className="absolute bottom-10 left-10 flex items-center gap-4 md:bottom-14 md:left-[calc(50%+3.5rem)]">
-        <button aria-label="이전" onClick={() => go(-1)} className="grid h-11 w-11 place-items-center border border-slate-300 bg-white transition-colors hover:bg-slate-900 hover:text-white">
+        <button aria-label={C.ui.prev} onClick={() => go(-1)} className="grid h-11 w-11 place-items-center border border-slate-300 bg-white transition-colors hover:bg-slate-900 hover:text-white">
           <ArrowLeft className="h-4 w-4" />
         </button>
-        <button aria-label="다음" onClick={() => go(1)} className="grid h-11 w-11 place-items-center border border-slate-300 bg-white transition-colors hover:bg-slate-900 hover:text-white">
+        <button aria-label={C.ui.next} onClick={() => go(1)} className="grid h-11 w-11 place-items-center border border-slate-300 bg-white transition-colors hover:bg-slate-900 hover:text-white">
           <ArrowRight className="h-4 w-4" />
         </button>
         <span className="t-body-md tabular-nums text-[#666]">
@@ -287,6 +292,9 @@ function lockup() {
 }
 
 export default function DesignA() {
+  const C = useContent();
+  const lang = useLang();
+  const href = useHref();
   useSmoothScroll();
   const root = useRef<HTMLDivElement>(null);
 
@@ -372,20 +380,25 @@ export default function DesignA() {
             <span className="h-px w-9 bg-[#71B4FE]" />
             {C.hero.eyebrow}
           </p>
-          <h1 className="t-display-lg max-md:!text-[32px] max-md:!leading-[42px]">
-            <span className="a-hero-line block overflow-hidden">
-              <span className="block">
-                <em className="font-bold not-italic tracking-[-0.02em] text-[#71B4FE]">전문성</em>을 이어,
+          <h1 className={`t-display-lg max-md:!text-[32px] max-md:!leading-[42px] ${lang === 'en' ? '!font-bold tracking-[-0.02em]' : ''}`}>
+            {C.hero.lines.map((line, n) => (
+              <span key={n} className="a-hero-line block overflow-hidden">
+                <span className="block">
+                  {line.map((s, k) =>
+                    s.hl ? (
+                      <em key={k} className="font-bold not-italic tracking-[-0.02em] text-[#71B4FE]">
+                        {s.t}
+                      </em>
+                    ) : (
+                      s.t
+                    ),
+                  )}
+                </span>
               </span>
-            </span>
-            <span className="a-hero-line block overflow-hidden">
-              <span className="block">
-                <em className="font-bold not-italic tracking-[-0.02em] text-[#71B4FE]">새로운 가치</em>를 <em className="font-bold not-italic tracking-[-0.02em] text-[#71B4FE]">연결</em>합니다.
-              </span>
-            </span>
+            ))}
           </h1>
           <p className="a-hero-fade t-heading-sm mt-8 text-white/80 max-md:mt-5 max-md:!text-[16px] max-md:!leading-[26px]">{C.hero.desc}</p>
-          <Link href="/contact#form" className="a-hero-fade mt-12 inline-flex h-[52px] w-[160px] items-center justify-center gap-5 border border-white/[0.32] text-[14px] md:h-[58px] md:w-[178px] md:text-[18px] font-bold leading-[28px] hover:bg-white hover:text-[#13243a]">
+          <Link href={href('/contact#form')} className="a-hero-fade mt-12 inline-flex h-[52px] w-fit min-w-[160px] items-center justify-center gap-5 whitespace-nowrap px-6 border border-white/[0.32] text-[14px] md:h-[58px] md:min-w-[178px] md:text-[18px] font-bold leading-[28px] hover:bg-white hover:text-[#13243a]">
             {C.hero.cta} <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>
@@ -423,10 +436,12 @@ export default function DesignA() {
         </div>
         <div className="a-philo-txt relative z-10 max-w-2xl px-6 text-center">
           <p className="t-eyebrow !leading-[15px] text-[#71B4FE]">{C.philosophy.eyebrow}</p>
-          <h2 className="t-display-md mt-6">
-            {C.philosophy.title[0]}
-            <br />
-            <span className="text-[#71B4FE]">{C.philosophy.title[1]}</span>
+          <h2 className={`t-display-md mt-6 ${lang === 'en' ? '!font-medium' : ''}`}>
+            {C.philosophy.lines.map((line, n) => (
+              <span key={n} className="block">
+                {line.map((s, k) => (s.hl ? <span key={k} className="text-[#71B4FE]">{s.t}</span> : s.t))}
+              </span>
+            ))}
           </h2>
           <p className="t-body-lg mx-auto mt-6 whitespace-pre-line text-white/80">{C.philosophy.desc}</p>
         </div>
@@ -468,9 +483,9 @@ export default function DesignA() {
           <div className="flex flex-wrap items-end justify-between gap-6" data-reveal>
             <div>
               <p className="t-eyebrow text-[#1F7AE0]">OUR PRODUCT</p>
-              <h2 className="t-display-md mt-3">Featured Product</h2>
+              <h2 className="t-display-md mt-3">{C.product.title}</h2>
             </div>
-            <p className="t-body-md max-w-xs text-[#666]">검증된 글로벌 의료기기 브랜드와 함께 더 나은 의료 경험을 만들어갑니다.</p>
+            <p className="t-body-md max-w-xs text-[#666]">{C.product.desc}</p>
           </div>
           <ProductSlider />
         </div>
@@ -493,7 +508,7 @@ export default function DesignA() {
             {C.partnership.cards.map((c, i) => (
               <Link
                 key={c.title}
-                href="/contact#form"
+                href={href('/contact#form')}
                 data-reveal={i * 0.12}
                 className="group flex items-center justify-between border border-[#79C9FA]/20 bg-[#79C9FA]/[0.06] px-6 py-7 transition-colors duration-300 hover:border-[#1F7AE0] hover:bg-[#1F7AE0]"
               >
@@ -516,10 +531,10 @@ export default function DesignA() {
           <div className="flex flex-wrap items-end justify-between gap-6" data-reveal>
             <div>
               <p className="t-eyebrow text-[#1F7AE0]">
-                <span className="md:hidden">WHY SHINHAN</span>
+                <span className="md:hidden">{C.values.eyebrowMobile}</span>
                 <span className="hidden md:inline">{C.values.eyebrow}</span>
               </p>
-              <h2 className="t-display-md mt-3">{C.values.title}</h2>
+              <h2 className="t-display-md mt-3 max-w-[600px]">{C.values.title}</h2>
             </div>
             <p className="t-body-md max-w-[340px] text-[#666]">{C.values.desc}</p>
           </div>
@@ -545,8 +560,8 @@ export default function DesignA() {
             })}
           </div>
           <div className="mt-8 flex justify-end">
-            <Link href="/about" className="t-nav inline-flex items-center gap-2 !font-bold transition-colors hover:text-[#1F7AE0]">
-              회사 소개 <ArrowRight className="h-4 w-4" />
+            <Link href={href('/about')} className="t-nav inline-flex items-center gap-2 !font-bold transition-colors hover:text-[#1F7AE0]">
+              {C.values.about} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
@@ -559,18 +574,21 @@ export default function DesignA() {
 
 export function Footer({ tone = 'dark' }: { tone?: 'dark' | 'light' }) {
   // Figma 푸터: #1A2D3B, 로고 + 메뉴 한 줄(모바일도) / 구분선 / 소개 문구 + 저작권
+  const C = useContent();
+  const lang = useLang();
+  const href = useHref();
   const dark = tone === 'dark';
   return (
     <footer className={`px-5 pb-9 pt-12 md:px-6 md:py-12 ${dark ? 'bg-[#1A2D3B] text-white' : 'bg-white text-[#0d1b2a]'}`}>
       <BackToTop />
       <div className="mx-auto max-w-[1240px]">
         <div className={`flex items-center justify-between gap-7 border-b pb-[30px] ${dark ? 'border-white/[0.28]' : 'border-slate-200'}`}>
-          <Link href="/" aria-label="신한네트웍스 홈" className="shrink-0">
+          <Link href={href('/')} aria-label={C.ui.home} className="shrink-0">
             <Wordmark />
           </Link>
-          <nav className={`t-nav flex gap-6 max-md:!text-[12px] max-md:!leading-[18px] md:gap-8 ${dark ? 'text-white/80' : 'text-slate-600'}`}>
+          <nav className={`t-nav flex ${lang === 'en' ? 'gap-4' : 'gap-6'} max-md:!text-[12px] max-md:!leading-[18px] md:gap-8 ${dark ? 'text-white/80' : 'text-slate-600'}`}>
             {C.footerNav.map((n) => (
-              <Link key={n.label} href={n.href} className="whitespace-nowrap transition-colors hover:text-[#71B4FE]">
+              <Link key={n.label} href={href(n.href)} className="whitespace-nowrap transition-colors hover:text-[#71B4FE]">
                 {n.label}
               </Link>
             ))}
