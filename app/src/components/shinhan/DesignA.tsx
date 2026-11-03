@@ -111,7 +111,7 @@ function HeroRings() {
 }
 
 export function Header({ active }: { active?: (typeof C.nav)[number] }) {
-  // 11/03: 헤더 FIXED — 스크롤해도 항상 상단 고정. 모바일은 60px + 햄버거 메뉴(Figma M/nav)
+  // 11/03: 헤더 FIXED — 스크롤해도 항상 상단 고정. 모바일은 헤더 막대 없이 햄버거 버튼만 떠 있음
   const C = useContent();
   const href = useHref();
   const [open, setOpen] = useState(false);
@@ -123,12 +123,12 @@ export function Header({ active }: { active?: (typeof C.nav)[number] }) {
   }, [open]);
   return (
     <>
-      <header className={`a-header fixed inset-x-0 top-0 z-50 border-b border-white/15 bg-[#273E4E]/90 backdrop-blur-[12px] ${open ? 'max-md:invisible' : ''}`}>
+      <header className={`a-header fixed inset-x-0 top-0 z-50 border-b border-white/15 bg-[#273E4E]/90 backdrop-blur-[12px] max-md:pointer-events-none max-md:border-0 max-md:bg-transparent max-md:backdrop-blur-none ${open ? 'max-md:invisible' : ''}`}>
         <div className="mx-auto flex h-[60px] max-w-[1240px] items-center justify-between px-5 text-white md:h-[77px] md:px-6">
-          <Link href={href('/')} aria-label={C.ui.home} onClick={() => setOpen(false)}>
+          <Link href={href('/')} aria-label={C.ui.home} onClick={() => setOpen(false)} className="max-md:hidden">
             <Wordmark />
           </Link>
-          <div className="flex items-center gap-5 md:gap-10">
+          <div className="ml-auto flex items-center gap-5 md:gap-10">
             <nav className="t-nav hidden gap-[34px] text-white md:flex">
               {C.nav.map((n) => (
                 <Link key={n} href={href(C.routes[n])} className={`transition-colors hover:text-[#71B4FE] ${active === n ? 'text-[#71B4FE]' : ''}`}>
@@ -140,7 +140,7 @@ export function Header({ active }: { active?: (typeof C.nav)[number] }) {
             <Link href={href('/contact#form')} className="t-button hidden items-center gap-4 border border-white/40 px-5 py-2 transition-colors hover:bg-white hover:text-[#273E4E] md:inline-flex">
               {C.hero.cta} <ArrowUpRight className="h-4 w-4" />
             </Link>
-            <button type="button" aria-label={open ? C.ui.menuClose : C.ui.menuOpen} aria-expanded={open} onClick={() => setOpen((v) => !v)} className="relative grid h-10 w-10 place-items-center md:hidden">
+            <button type="button" aria-label={open ? C.ui.menuClose : C.ui.menuOpen} aria-expanded={open} onClick={() => setOpen((v) => !v)} className="pointer-events-auto relative grid h-11 w-11 place-items-center rounded-full bg-[#273E4E]/90 backdrop-blur-[12px] md:hidden">
               <span className={`absolute h-px w-5 bg-white transition-transform duration-300 ${open ? 'rotate-45' : '-translate-y-[4px]'}`} />
               <span className={`absolute h-px w-5 bg-white transition-transform duration-300 ${open ? '-rotate-45' : 'translate-y-[4px]'}`} />
             </button>
