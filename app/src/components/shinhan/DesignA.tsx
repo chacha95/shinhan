@@ -136,7 +136,7 @@ export function Header({ active }: { active?: (typeof C.nav)[number] }) {
                 </Link>
               ))}
             </nav>
-            <LangSwitch className="t-caption !leading-4 tracking-[1px] text-white" />
+            <LangSwitch className="t-caption !leading-4 tracking-[1px] text-white max-md:hidden" />
             <Link href={href('/contact#form')} className="t-button hidden items-center gap-4 border border-white/40 px-5 py-2 transition-colors hover:bg-white hover:text-[#273E4E] md:inline-flex">
               {C.hero.cta} <ArrowUpRight className="h-4 w-4" />
             </Link>
