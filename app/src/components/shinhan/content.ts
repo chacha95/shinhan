@@ -33,7 +33,7 @@ const inmodeDesc = 'INMODE는 의료진과 환자의 더 나은 경험을 위해
 // Featured Product — Figma 기준 2개 모델
 export const products: { name: string; tag: string; copy: string; image?: string; desc?: string }[] = [
   { name: 'INMODE RF', image: '/products/inmode-rf.webp', tag: 'INMODE', copy: '혁신적인 기술로\n의료의 새로운 기준을 제시합니다.', desc: inmodeDesc },
-  { name: 'Evoke Naked', image: '/products/evoke.webp', tag: 'INMODE', copy: '혁신적인 기술로\n의료의 새로운 기준을 제시합니다.', desc: inmodeDesc },
+  { name: '뉴 인모드 핸즈프리', image: '/products/evoke.webp', tag: 'NEW INMODE HANDS FREE / INMODE EVOKE', copy: '혁신적인 기술로\n의료의 새로운 기준을 제시합니다.', desc: inmodeDesc },
 ];
 
 export const partnership = {
