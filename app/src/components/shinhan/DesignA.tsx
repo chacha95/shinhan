@@ -7,7 +7,6 @@ import { gsap, useSmoothScroll, reveal, countUp } from './motion';
 import { WaveField } from './WaveField';
 import { LogoType, Symbol, Wordmark } from './Symbol';
 import { ProductVisual } from './ProductVisual';
-import { Odometer, rollOdometers } from './Odometer';
 import * as C from './content';
 
 const BG = '#08131f';
@@ -304,7 +303,6 @@ export default function DesignA() {
 
       reveal(root.current!);
       countUp(root.current!);
-      rollOdometers(root.current!);
 
       // 파트너십 원 회전 스크럽
       gsap.to('.a-part-circle', {
@@ -500,21 +498,6 @@ export default function DesignA() {
         <a href="#" className="t-nav absolute bottom-16 right-[max(1.5rem,calc((100vw-1180px)/2+1.5rem))] inline-flex items-center gap-2 !font-bold text-white/80 transition-colors hover:text-[#71B4FE]">
           회사 소개 <ArrowRight className="h-4 w-4" />
         </a>
-      </section>
-
-      {/* STATS */}
-      <section className="bg-white px-6 py-[120px] text-black">
-        <div className="mx-auto grid max-w-[1180px] grid-cols-2 gap-10 md:grid-cols-4">
-          {C.stats.map((s, i) => (
-            <div key={s.label} data-reveal={i * 0.08}>
-              <p className="text-[clamp(44px,3.75vw,72px)] font-bold leading-[1.15] tracking-[-0.02em]">
-                <Odometer value={s.value} />
-                <span className="text-[#1F7AE0]">{s.suffix}</span>
-              </p>
-              <p className="t-body-lg mt-3 !font-normal text-[#666]">{s.label}</p>
-            </div>
-          ))}
-        </div>
       </section>
 
       <Footer />
