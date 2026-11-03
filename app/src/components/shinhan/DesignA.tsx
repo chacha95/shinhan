@@ -283,6 +283,13 @@ export default function DesignA() {
           '<0.3',
         );
 
+      // 핀 고정 섹션은 페이지 순서대로 생성해야 아래 섹션 시작 위치가 어긋나지 않음
+      // 영상 — 화면 가운데 작은 창에서 전체화면으로 펼쳐짐
+      gsap
+        .timeline({ scrollTrigger: { trigger: '.a-video', start: 'top top', end: '+=120%', scrub: 1, pin: true } })
+        .fromTo('.a-video-frame', { clipPath: 'inset(22% 26% 22% 26%)' }, { clipPath: 'inset(0% 0% 0% 0%)', ease: 'none' })
+        .fromTo('.a-video-el', { scale: 1.25 }, { scale: 1, ease: 'none' }, 0);
+
       // 가치 — 겹친 세 원이 좌우로 펼쳐지며 텍스트 등장
       const vt = gsap.timeline({
         scrollTrigger: { trigger: '.a-values', start: 'top top', end: '+=160%', scrub: 1, pin: true },
@@ -291,12 +298,6 @@ export default function DesignA() {
         .from('.a-venn-2', { xPercent: -100, duration: 1 }, 0)
         .from('.a-venn-1', { scale: 0.7, duration: 1 }, 0)
         .from('.a-venn-txt', { opacity: 0, y: 30, stagger: 0.1, duration: 0.5 }, 0.6);
-
-      // 영상 — 화면 가운데 작은 창에서 전체화면으로 펼쳐짐
-      gsap
-        .timeline({ scrollTrigger: { trigger: '.a-video', start: 'top top', end: '+=120%', scrub: 1, pin: true } })
-        .fromTo('.a-video-frame', { clipPath: 'inset(22% 26% 22% 26%)' }, { clipPath: 'inset(0% 0% 0% 0%)', ease: 'none' })
-        .fromTo('.a-video-el', { scale: 1.25 }, { scale: 1, ease: 'none' }, 0);
 
       // 제품 카드 — 아래에서 밀려 올라옴
       gsap.from('.a-prod', { y: 160, scale: 0.96, opacity: 0, duration: 1.4, ease: 'power4.out', scrollTrigger: { trigger: '.a-prod', start: 'top 92%' } });

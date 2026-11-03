@@ -17,7 +17,20 @@ export function useSmoothScroll() {
     const tick = (t: number) => lenis.raf(t * 1000);
     gsap.ticker.add(tick);
     gsap.ticker.lagSmoothing(0);
+
+    // 이미지·영상·폰트 로드로 페이지 높이가 바뀌면 핀 위치를 다시 계산 (안 하면 핀 구간이 점프)
+    let timer = 0;
+    const ro = new ResizeObserver(() => {
+      clearTimeout(timer);
+      timer = window.setTimeout(() => ScrollTrigger.refresh(), 150);
+    });
+    ro.observe(document.body);
+    const onLoad = () => ScrollTrigger.refresh();
+    window.addEventListener('load', onLoad);
     return () => {
+      clearTimeout(timer);
+      ro.disconnect();
+      window.removeEventListener('load', onLoad);
       gsap.ticker.remove(tick);
       lenis.destroy();
     };
