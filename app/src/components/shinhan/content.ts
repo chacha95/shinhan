@@ -1,6 +1,7 @@
 // 시안 공통 콘텐츠 — Figma(신한네트웍스 Main) + 기존 사이트(shsystek.co.kr) 기준
 
-export const nav = ['ABOUT', 'PRODUCT', 'CONTACT', 'NEWS'] as const;
+export const nav = ['ABOUT', 'PRODUCT', 'CONTACT'] as const;
+export const footerNav = ['회사소개', '제품소개', '비즈니스 문의'] as const;
 
 export const hero = {
   eyebrow: 'MEDICAL EXPERTISE, CONNECTED',
@@ -22,8 +23,14 @@ export const stats = [
   { value: 1500, suffix: '+', label: '파트너 병원' },
 ];
 
-export const products: { name: string; tag: string; copy: string; image?: string }[] = [
-  { name: 'INMODE', image: '/products/inmode.png', tag: 'RF Platform', copy: '혁신적인 기술로\n의료의 새로운 기준을 제시합니다.' },
+export const products: { name: string; tag: string; copy: string; image?: string; desc?: string }[] = [
+  {
+    name: 'INMODE RF',
+    image: '/products/inmode-rf.png',
+    tag: 'INMODE',
+    copy: '혁신적인 기술로\n의료의 새로운 기준을 제시합니다.',
+    desc: 'INMODE는 의료진과 환자의 더 나은 경험을 위해 혁신적인 에너지 기반 기술과 정교한 솔루션을 제공하는 글로벌 의료기기 브랜드입니다.',
+  },
   { name: 'SofWave', image: '/products/sofwave.png', tag: 'Ultrasound Lifting', copy: '당신의 시간이\n느리게 흐를 수 있도록.' },
   { name: 'StarWalker QX', image: '/products/starwalker-qx.png', tag: 'Hybrid Laser', copy: '나노와 피코,\n그 이상의 가치 하이브리드.' },
   { name: 'J CATH', image: '/products/j-cath.png', tag: 'EP Catheter', copy: '세계 최초\nMulti Bi-Directional Duodeca.' },
@@ -37,17 +44,17 @@ export const partnership = {
   desc: '글로벌 브랜드 파트너십부터 해외 비즈니스, 제품 자료 요청까지.\n신한네트웍스의 전문 담당자가 정확하고 신속하게 안내해 드립니다.',
   cards: [
     { label: 'BUSINESS', title: '파트너십 문의' },
-    { label: 'PRODUCT', title: '제품 자료 요청' },
   ],
 };
 
 export const values = {
   eyebrow: 'BRAND IDENTITY',
   title: '연결의 힘으로 만드는 가치',
+  desc: '전문성과 네트워크, 책임 있는 서비스. 신한네트웍스가 지켜가는 핵심 가치입니다.',
   items: [
-    { en: 'Expertise', ko: '검증된 전문성', desc: '30년 의료기기 유통·기술 노하우로 최적의 장비를 제안합니다.' },
-    { en: 'Network', ko: '글로벌 네트워크', desc: '세계 유수 제조사와의 파트너십으로 최신 기술을 가장 먼저 연결합니다.' },
-    { en: 'Service', ko: '고객 중심 서비스', desc: '설치·교육·A/S까지, 고객 신뢰를 최우선으로 생각합니다.' },
+    { en: 'Expertise', ko: '전문성과 경험', desc: '의료기기 산업에 대한 깊은 이해와 축적된 경험으로 제품의 가치를 정확히 전달합니다.' },
+    { en: 'Network', ko: '글로벌 브랜드와 현장의 연결', desc: '세계적인 의료 브랜드와 국내 의료 현장을 유기적으로 연결해 새로운 가능성을 만듭니다.' },
+    { en: 'Service', ko: '신속하고 정확한 서비스', desc: '안정적인 제품 공급부터 문의 대응, 전문 자료 제공까지 비즈니스 전 과정을 지원합니다.' },
   ],
 };
 

@@ -3,7 +3,7 @@
 // 시안 A — PULSE : Figma 원안 충실형. 다크 네이비 + 동심원 파동 + 원근 물결선
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ArrowLeft, ArrowUpRight } from 'lucide-react';
-import { gsap, ScrollTrigger, useSmoothScroll, reveal, countUp } from './motion';
+import { gsap, useSmoothScroll, reveal, countUp } from './motion';
 import { WaveField } from './WaveField';
 import { LogoType, Symbol, Wordmark } from './Symbol';
 import { ProductVisual } from './ProductVisual';
@@ -109,27 +109,12 @@ function HeroRings() {
 }
 
 function Header() {
-  // 항상 같은 모양. 아래로 스크롤하면 부드럽게 위로 숨고, 위로 스크롤하면 다시 내려옴
-  const bar = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    let hidden = false;
-    const set = (hide: boolean) => {
-      if (hide === hidden) return;
-      hidden = hide;
-      gsap.to(bar.current, { yPercent: hide ? -100 : 0, duration: 0.5, ease: 'power3.out', overwrite: true });
-    };
-    const st = ScrollTrigger.create({
-      start: 0,
-      end: 'max',
-      onUpdate: (self) => set(self.scroll() > 120 && self.direction === 1),
-    });
-    return () => st.kill();
-  }, []);
+  // 11/03: 헤더 FIXED — 스크롤해도 항상 상단 고정
   return (
-    <header className="a-header fixed inset-x-0 top-0 z-50">
-      <div ref={bar} className="border-b border-white/10 bg-[#1b2b3b]/95 backdrop-blur-md will-change-transform">
-        <div className="mx-auto flex h-[77px] max-w-[1240px] items-center justify-between px-6 text-white">
-          <Wordmark />
+    <header className="a-header fixed inset-x-0 top-0 z-50 border-b border-white/15 bg-[#273E4E]/90 backdrop-blur-[12px]">
+      <div className="mx-auto flex h-[77px] max-w-[1240px] items-center justify-between px-6 text-white">
+        <Wordmark />
+        <div className="flex items-center gap-10">
           <nav className="t-nav hidden gap-[34px] text-white md:flex">
             {C.nav.map((n) => (
               <a key={n} href="#" className="transition-colors hover:text-[#71B4FE]">
@@ -137,9 +122,49 @@ function Header() {
               </a>
             ))}
           </nav>
+          <a href="#" className="t-button hidden items-center gap-4 border border-white/40 px-5 py-2 transition-colors hover:bg-white hover:text-[#273E4E] sm:inline-flex">
+            {C.hero.cta} <ArrowUpRight className="h-4 w-4" />
+          </a>
         </div>
       </div>
     </header>
+  );
+}
+
+/** 11/03: 영상 영역 전체화면 — 작은 창에서 화면 가득 펼쳐지며 재생 */
+function VideoSection() {
+  const video = useRef<HTMLVideoElement>(null);
+  const [muted, setMuted] = useState(true);
+  useEffect(() => {
+    const v = video.current!;
+    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause()), { threshold: 0.2 });
+    io.observe(v);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <section className="a-video relative h-svh overflow-hidden bg-[#08131f]">
+      <div className="a-video-frame absolute inset-0 overflow-hidden">
+        <video
+          ref={video}
+          className="a-video-el h-full w-full object-cover"
+          src="/video/evoke.mp4"
+          poster="/video/evoke-poster.jpg"
+          muted={muted}
+          loop
+          playsInline
+          preload="metadata"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
+      </div>
+      <button
+        type="button"
+        onClick={() => setMuted((m) => !m)}
+        className="t-caption absolute bottom-8 right-8 z-10 border border-white/40 px-4 py-2.5 text-white/90 backdrop-blur-sm transition-colors hover:bg-white hover:text-[#08131f]"
+        aria-label={muted ? '소리 켜기' : '소리 끄기'}
+      >
+        {muted ? 'SOUND OFF' : 'SOUND ON'}
+      </button>
+    </section>
   );
 }
 
@@ -161,13 +186,17 @@ function ProductSlider() {
       <div className="flex transition-transform duration-[900ms] ease-[cubic-bezier(.77,0,.18,1)]" style={{ transform: `translateX(-${i * 100}%)` }}>
         {C.products.map((p, k) => (
           <div key={p.name} className="grid w-full shrink-0 md:grid-cols-2" aria-hidden={k !== i}>
-            <ProductVisual name={p.name} image={p.image} className="aspect-[4/3] md:aspect-auto md:min-h-[440px]" />
+            <div className="relative">
+              <ProductVisual name={p.name} image={p.image} className="h-full aspect-[4/3] md:aspect-auto md:min-h-[440px]" />
+              <span className="t-tag absolute left-6 top-6 rounded-full border border-[#1F7AE0]/25 bg-white/80 px-3 py-1 !text-[10px] text-[#1F7AE0]">GLOBAL MEDICAL BRAND</span>
+            </div>
             {/* 활성 슬라이드가 될 때마다 key가 바뀌어 글이 다시 올라옴 */}
             <div key={k === i ? `on-${i}` : 'off'} className="flex flex-col justify-center p-10 pb-32 md:p-14 md:pb-36">
               {[
                 <p key="t" className="t-tag text-[#71B4FE]">{p.tag}</p>,
                 <h3 key="n" className="t-display-xl mt-4">{p.name}</h3>,
                 <p key="c" className="mt-6 whitespace-pre-line text-[20px] font-bold leading-[1.3] tracking-[-0.02em]">{p.copy}</p>,
+                ...(p.desc ? [<p key="d" className="t-body-md mt-4 max-w-[440px] text-[#666]">{p.desc}</p>] : []),
                 <a key="l" href="#" className="t-nav mt-10 inline-flex w-fit items-center gap-2 !font-bold">
                   제품 자세히 보기 <ArrowRight className="h-4 w-4" />
                 </a>,
@@ -263,6 +292,12 @@ export default function DesignA() {
         .from('.a-venn-2', { xPercent: -100, duration: 1 }, 0)
         .from('.a-venn-1', { scale: 0.7, duration: 1 }, 0)
         .from('.a-venn-txt', { opacity: 0, y: 30, stagger: 0.1, duration: 0.5 }, 0.6);
+
+      // 영상 — 화면 가운데 작은 창에서 전체화면으로 펼쳐짐
+      gsap
+        .timeline({ scrollTrigger: { trigger: '.a-video', start: 'top top', end: '+=120%', scrub: 1, pin: true } })
+        .fromTo('.a-video-frame', { clipPath: 'inset(22% 26% 22% 26%)' }, { clipPath: 'inset(0% 0% 0% 0%)', ease: 'none' })
+        .fromTo('.a-video-el', { scale: 1.25 }, { scale: 1, ease: 'none' }, 0);
 
       // 제품 카드 — 아래에서 밀려 올라옴
       gsap.from('.a-prod', { y: 160, scale: 0.96, opacity: 0, duration: 1.4, ease: 'power4.out', scrollTrigger: { trigger: '.a-prod', start: 'top 92%' } });
@@ -386,6 +421,9 @@ export default function DesignA() {
         </div>
       </section>
 
+      {/* VIDEO — 11/03 전체화면 영상 */}
+      <VideoSection />
+
       {/* PRODUCT */}
       <section className="relative bg-[#F3F6F9] px-6 py-[120px] text-black">
         <div className="mx-auto max-w-[1180px]">
@@ -394,7 +432,7 @@ export default function DesignA() {
               <p className="t-eyebrow text-[#1F7AE0]">OUR PRODUCT</p>
               <h2 className="t-display-md mt-3">Featured Product</h2>
             </div>
-            <p className="t-body-md max-w-xs text-[#666]">검증된 글로벌 의료기기 브랜드를 국내 의료 현장에 가장 빠르게 연결합니다.</p>
+            <p className="t-body-md max-w-xs text-[#666]">검증된 글로벌 의료기기 브랜드와 함께 더 나은 의료 경험을 만들어갑니다.</p>
           </div>
           <ProductSlider />
         </div>
@@ -438,7 +476,10 @@ export default function DesignA() {
       <section className="a-values relative grid h-svh place-items-center overflow-hidden bg-[#06121f] px-6">
         <div className="absolute inset-x-0 top-24 mx-auto max-w-[1180px] px-6">
           <p className="t-eyebrow text-[#71B4FE]">{C.values.eyebrow}</p>
-          <h2 className="t-display-md mt-3">{C.values.title}</h2>
+          <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
+            <h2 className="t-display-md">{C.values.title}</h2>
+            <p className="t-body-md max-w-[360px] text-white/60">{C.values.desc}</p>
+          </div>
         </div>
         <div className="mt-24 flex items-center">
           {C.values.items.map((v, i) => (
@@ -456,6 +497,9 @@ export default function DesignA() {
             </div>
           ))}
         </div>
+        <a href="#" className="t-nav absolute bottom-16 right-[max(1.5rem,calc((100vw-1180px)/2+1.5rem))] inline-flex items-center gap-2 !font-bold text-white/80 transition-colors hover:text-[#71B4FE]">
+          회사 소개 <ArrowRight className="h-4 w-4" />
+        </a>
       </section>
 
       {/* STATS */}
@@ -473,55 +517,30 @@ export default function DesignA() {
         </div>
       </section>
 
-      {/* NEWS */}
-      <section className="bg-[#f4f7fb] px-6 py-[120px] text-black">
-        <div className="mx-auto max-w-[1180px]">
-          <div className="flex items-end justify-between" data-reveal>
-            <div>
-              <p className="t-eyebrow text-[#1F7AE0]">NEWS & INSIGHTS</p>
-              <h2 className="t-display-md mt-3">새로운 소식</h2>
-            </div>
-            <a href="#" className="t-nav !font-bold">VIEW MORE →</a>
-          </div>
-          <ul className="mt-12 border-t border-slate-300">
-            {C.news.map((n, i) => (
-              <li key={n.title} data-reveal={i * 0.08}>
-                <a href="#" className="group flex items-center gap-6 border-b border-slate-300 py-6">
-                  <span className="t-tag w-24 text-[#1F7AE0]">{n.cat}</span>
-                  <span className="t-body-sm hidden w-28 text-[#666] sm:block">{n.date}</span>
-                  <span className="t-body-lg flex-1 transition group-hover:translate-x-2">{n.title}</span>
-                  <span className="text-slate-400 transition group-hover:translate-x-1 group-hover:text-[#1F7AE0]">
-                    <ArrowRight className="h-4 w-4" />
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
       <Footer />
     </div>
   );
 }
 
 export function Footer({ tone = 'dark' }: { tone?: 'dark' | 'light' }) {
+  // 11/03 Figma 푸터: #092A2F, 로고 + 메뉴 / 소개 문구 + 저작권
   const dark = tone === 'dark';
   return (
-    <footer className={`px-6 py-14 text-sm ${dark ? 'bg-[#06101b] text-white/60' : 'bg-white text-slate-500'}`}>
-      <div className="mx-auto flex max-w-[1180px] flex-col gap-8 md:flex-row md:justify-between">
-        <div className={dark ? 'text-white' : 'text-[#0d1b2a]'}>
+    <footer className={`px-6 py-12 ${dark ? 'bg-[#092A2F] text-white' : 'bg-white text-[#0d1b2a]'}`}>
+      <div className="mx-auto max-w-[1240px]">
+        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <Wordmark />
+          <nav className={`t-nav flex gap-8 ${dark ? 'text-white/80' : 'text-slate-600'}`}>
+            {C.footerNav.map((n) => (
+              <a key={n} href="#" className="transition-colors hover:text-[#71B4FE]">
+                {n}
+              </a>
+            ))}
+          </nav>
         </div>
-        <div className="space-y-1 text-[13px]">
-          <p>
-            {C.company.name} · 대표 {C.company.ceo} · 사업자등록번호 {C.company.biz}
-          </p>
-          <p>{C.company.addr}</p>
-          <p>
-            TEL {C.company.tel} · FAX {C.company.fax}
-          </p>
-          <p className="pt-4 text-[12px] opacity-60">© SHINHAN NETWORKS. All rights reserved.</p>
+        <div className={`mt-10 flex flex-col gap-2 border-t pt-6 md:flex-row md:justify-between ${dark ? 'border-white/15 text-white/50' : 'border-slate-200 text-slate-500'}`}>
+          <p className="t-body-sm">{C.hero.desc}</p>
+          <p className="t-body-sm">© 2025 SHINHAN NETWORKS. ALL RIGHTS RESERVED.</p>
         </div>
       </div>
     </footer>
