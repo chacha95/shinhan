@@ -123,7 +123,7 @@ export function Header({ active }: { active?: (typeof C.nav)[number] }) {
   }, [open]);
   return (
     <>
-      <header className="a-header fixed inset-x-0 top-0 z-50 border-b border-white/15 bg-[#273E4E]/90 backdrop-blur-[12px]">
+      <header className={`a-header fixed inset-x-0 top-0 z-50 border-b border-white/15 bg-[#273E4E]/90 backdrop-blur-[12px] ${open ? 'max-md:invisible' : ''}`}>
         <div className="mx-auto flex h-[60px] max-w-[1240px] items-center justify-between px-5 text-white md:h-[77px] md:px-6">
           <Link href={href('/')} aria-label={C.ui.home} onClick={() => setOpen(false)}>
             <Wordmark />
