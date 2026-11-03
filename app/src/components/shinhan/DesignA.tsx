@@ -124,7 +124,7 @@ export function Header({ active }: { active?: (typeof C.nav)[number] }) {
               </Link>
             ))}
           </nav>
-          <Link href="/contact" className="t-button hidden items-center gap-4 border border-white/40 px-5 py-2 transition-colors hover:bg-white hover:text-[#273E4E] sm:inline-flex">
+          <Link href="/contact#form" className="t-button hidden items-center gap-4 border border-white/40 px-5 py-2 transition-colors hover:bg-white hover:text-[#273E4E] sm:inline-flex">
             {C.hero.cta} <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>
@@ -340,7 +340,7 @@ export default function DesignA() {
             </span>
           </h1>
           <p className="a-hero-fade t-heading-sm mt-8 text-white/80">{C.hero.desc}</p>
-          <Link href="/contact" className="a-hero-fade mt-12 inline-flex h-[58px] w-[178px] items-center justify-center gap-5 border border-white/[0.32] text-[18px] font-bold leading-[28px] hover:bg-white hover:text-[#13243a]">
+          <Link href="/contact#form" className="a-hero-fade mt-12 inline-flex h-[58px] w-[178px] items-center justify-center gap-5 border border-white/[0.32] text-[18px] font-bold leading-[28px] hover:bg-white hover:text-[#13243a]">
             {C.hero.cta} <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>
@@ -448,7 +448,7 @@ export default function DesignA() {
             {C.partnership.cards.map((c, i) => (
               <Link
                 key={c.title}
-                href="/contact"
+                href="/contact#form"
                 data-reveal={i * 0.12}
                 className="group flex items-center justify-between border border-[#79C9FA]/20 bg-[#79C9FA]/[0.06] px-6 py-7 transition-colors duration-300 hover:border-[#1F7AE0] hover:bg-[#1F7AE0]"
               >

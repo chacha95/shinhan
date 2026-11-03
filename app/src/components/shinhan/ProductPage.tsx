@@ -20,7 +20,7 @@ export default function ProductPage() {
       {/* 제품 슬라이더 */}
       <section className="bg-white px-6 py-[120px]">
         <div className="mx-auto max-w-[1180px]">
-          <ProductSlider cta={{ label: '제품 문의하기', href: '/contact' }} />
+          <ProductSlider cta={{ label: '제품 문의하기', href: '/contact#form' }} />
         </div>
       </section>
 
@@ -74,7 +74,7 @@ export default function ProductPage() {
               </span>
             </a>
             <Link
-              href="/contact"
+              href="/contact#form"
               data-reveal="0.1"
               className="group flex flex-col border border-[#E3E9F0] bg-white p-10 transition-colors duration-300 hover:border-[#1F7AE0] md:p-12"
             >

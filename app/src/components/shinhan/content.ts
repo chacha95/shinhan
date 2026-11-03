@@ -5,7 +5,7 @@ export const routes: Record<(typeof nav)[number], string> = { ABOUT: '/about', P
 export const footerNav = [
   { label: '회사소개', href: '/about' },
   { label: '제품소개', href: '/product' },
-  { label: '비즈니스 문의', href: '/contact' },
+  { label: '비즈니스 문의', href: '/contact#form' },
 ];
 
 export const hero = {

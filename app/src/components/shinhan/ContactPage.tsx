@@ -33,8 +33,8 @@ export default function ContactPage() {
         desc={'신한네트웍스는 의료기기 분야의 전문성과 네트워크를 바탕으로\n다양한 파트너와 함께 새로운 가능성을 만들어갑니다.'}
       />
 
-      {/* CONTACT FORM */}
-      <section className="bg-white px-6 py-[120px]">
+      {/* CONTACT FORM — 비즈니스 문의 버튼은 /contact#form 으로 바로 연결 */}
+      <section id="form" className="scroll-mt-[77px] bg-white px-6 py-[120px]">
         <div className="mx-auto grid max-w-[1200px] gap-14 md:grid-cols-[1fr_1.3fr]">
           <div data-reveal>
             <p className="t-eyebrow text-[#1F7AE0]">CONTACT FORM</p>
