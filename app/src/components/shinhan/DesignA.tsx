@@ -2,7 +2,8 @@
 
 // 시안 A — PULSE : Figma 원안 충실형. 다크 네이비 + 동심원 파동 + 원근 물결선
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, ArrowLeft, ArrowUpRight } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowRight, ArrowLeft, ArrowUpRight, Award, Globe2, MessageSquareText } from 'lucide-react';
 import { gsap, useSmoothScroll, reveal, countUp } from './motion';
 import { WaveField } from './WaveField';
 import { LogoType, Symbol, Wordmark } from './Symbol';
@@ -107,23 +108,25 @@ function HeroRings() {
   );
 }
 
-function Header() {
+export function Header({ active }: { active?: (typeof C.nav)[number] }) {
   // 11/03: 헤더 FIXED — 스크롤해도 항상 상단 고정
   return (
     <header className="a-header fixed inset-x-0 top-0 z-50 border-b border-white/15 bg-[#273E4E]/90 backdrop-blur-[12px]">
       <div className="mx-auto flex h-[77px] max-w-[1240px] items-center justify-between px-6 text-white">
-        <Wordmark />
+        <Link href="/" aria-label="신한네트웍스 홈">
+          <Wordmark />
+        </Link>
         <div className="flex items-center gap-10">
           <nav className="t-nav hidden gap-[34px] text-white md:flex">
             {C.nav.map((n) => (
-              <a key={n} href="#" className="transition-colors hover:text-[#71B4FE]">
+              <Link key={n} href={C.routes[n]} className={`transition-colors hover:text-[#71B4FE] ${active === n ? 'text-[#71B4FE]' : ''}`}>
                 {n}
-              </a>
+              </Link>
             ))}
           </nav>
-          <a href="#" className="t-button hidden items-center gap-4 border border-white/40 px-5 py-2 transition-colors hover:bg-white hover:text-[#273E4E] sm:inline-flex">
+          <Link href="/contact" className="t-button hidden items-center gap-4 border border-white/40 px-5 py-2 transition-colors hover:bg-white hover:text-[#273E4E] sm:inline-flex">
             {C.hero.cta} <ArrowUpRight className="h-4 w-4" />
-          </a>
+          </Link>
         </div>
       </div>
     </header>
@@ -170,7 +173,7 @@ function VideoSection() {
 const N = C.products.length;
 
 /** 제품 슬라이더 — 기존 사이트처럼 카드 전체가 옆으로 밀리며 넘어가고, 새 슬라이드 글이 아래에서 올라옴 */
-function ProductSlider() {
+export function ProductSlider({ cta = { label: '제품 자세히 보기', href: '/product' } }: { cta?: { label: string; href: string } }) {
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
   useEffect(() => {
@@ -196,9 +199,9 @@ function ProductSlider() {
                 <h3 key="n" className="t-display-xl mt-4">{p.name}</h3>,
                 <p key="c" className="mt-6 whitespace-pre-line text-[20px] font-bold leading-[1.3] tracking-[-0.02em]">{p.copy}</p>,
                 ...(p.desc ? [<p key="d" className="t-body-md mt-4 max-w-[440px] text-[#666]">{p.desc}</p>] : []),
-                <a key="l" href="#" className="t-nav mt-10 inline-flex w-fit items-center gap-2 !font-bold">
-                  제품 자세히 보기 <ArrowRight className="h-4 w-4" />
-                </a>,
+                <Link key="l" href={cta.href} className="t-nav mt-10 inline-flex w-fit items-center gap-2 !font-bold">
+                  {cta.label} <ArrowRight className="h-4 w-4" />
+                </Link>,
               ].map((el, n) => (
                 <div key={n} style={k === i ? { animation: `rise-in .9s cubic-bezier(.16,1,.3,1) ${0.35 + n * 0.09}s both` } : undefined}>
                   {el}
@@ -290,15 +293,6 @@ export default function DesignA() {
         .fromTo('.a-video-frame', { clipPath: 'inset(22% 26% 22% 26%)' }, { clipPath: 'inset(0% 0% 0% 0%)', ease: 'none' })
         .fromTo('.a-video-el', { scale: 1.25 }, { scale: 1, ease: 'none' }, 0);
 
-      // 가치 — 겹친 세 원이 좌우로 펼쳐지며 텍스트 등장
-      const vt = gsap.timeline({
-        scrollTrigger: { trigger: '.a-values', start: 'top top', end: '+=160%', scrub: 1, pin: true },
-      });
-      vt.from('.a-venn-0', { xPercent: 100, duration: 1 })
-        .from('.a-venn-2', { xPercent: -100, duration: 1 }, 0)
-        .from('.a-venn-1', { scale: 0.7, duration: 1 }, 0)
-        .from('.a-venn-txt', { opacity: 0, y: 30, stagger: 0.1, duration: 0.5 }, 0.6);
-
       // 제품 카드 — 아래에서 밀려 올라옴
       gsap.from('.a-prod', { y: 160, scale: 0.96, opacity: 0, duration: 1.4, ease: 'power4.out', scrollTrigger: { trigger: '.a-prod', start: 'top 92%' } });
 
@@ -346,9 +340,9 @@ export default function DesignA() {
             </span>
           </h1>
           <p className="a-hero-fade t-heading-sm mt-8 text-white/80">{C.hero.desc}</p>
-          <a href="#" className="a-hero-fade mt-12 inline-flex h-[58px] w-[178px] items-center justify-center gap-5 border border-white/[0.32] text-[18px] font-bold leading-[28px] hover:bg-white hover:text-[#13243a]">
+          <Link href="/contact" className="a-hero-fade mt-12 inline-flex h-[58px] w-[178px] items-center justify-center gap-5 border border-white/[0.32] text-[18px] font-bold leading-[28px] hover:bg-white hover:text-[#13243a]">
             {C.hero.cta} <ArrowUpRight className="h-4 w-4" />
-          </a>
+          </Link>
         </div>
         <div className="a-hero-fade absolute inset-x-0 bottom-0 z-10 mx-auto max-w-[1240px] px-6">
           <div className="t-caption flex h-[63px] items-center justify-between border-t border-white/70 !leading-4 text-white/70">
@@ -452,53 +446,62 @@ export default function DesignA() {
           </div>
           <div className="flex flex-col gap-3">
             {C.partnership.cards.map((c, i) => (
-              <a
+              <Link
                 key={c.title}
-                href="#"
+                href="/contact"
                 data-reveal={i * 0.12}
                 className="group flex items-center justify-between border border-[#79C9FA]/20 bg-[#79C9FA]/[0.06] px-6 py-7 transition-colors duration-300 hover:border-[#1F7AE0] hover:bg-[#1F7AE0]"
               >
                 <span>
-                  <span className="t-caption block !text-[10px] !leading-[14px] text-[#8BE9D3] transition-colors duration-300 group-hover:text-white/80">{c.label}</span>
+                  <span className="t-caption block !text-[10px] !leading-[14px] text-[#71B4FE] transition-colors duration-300 group-hover:text-white/80">{c.label}</span>
                   <span className="t-nav mt-0.5 block">{c.title}</span>
                 </span>
                 <span className="grid h-10 w-10 place-items-center rounded-full border border-white/60 transition-colors duration-300 group-hover:border-white group-hover:bg-white group-hover:text-[#1F7AE0]">
                   <ArrowUpRight className="h-4 w-4" />
                 </span>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* VALUES — 세 개의 원이 겹쳐 있다가 펼쳐짐 */}
-      <section className="a-values relative grid h-svh place-items-center overflow-hidden bg-[#06121f] px-6">
-        <div className="absolute inset-x-0 top-24 mx-auto max-w-[1180px] px-6">
-          <p className="t-eyebrow text-[#71B4FE]">{C.values.eyebrow}</p>
-          <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
-            <h2 className="t-display-md">{C.values.title}</h2>
-            <p className="t-body-md max-w-[360px] text-white/60">{C.values.desc}</p>
+      {/* BRAND IDENTITY — Figma 11/03: 흰 배경 카드 3개 */}
+      <section className="bg-white px-6 py-[120px] text-black">
+        <div className="mx-auto max-w-[1240px]">
+          <div className="flex flex-wrap items-end justify-between gap-6" data-reveal>
+            <div>
+              <p className="t-eyebrow text-[#1F7AE0]">{C.values.eyebrow}</p>
+              <h2 className="t-display-md mt-3">{C.values.title}</h2>
+            </div>
+            <p className="t-body-md max-w-[340px] text-[#666]">{C.values.desc}</p>
+          </div>
+          <div className="mt-14 grid border border-[#E3E9F0] md:grid-cols-3">
+            {C.values.items.map((v, i) => {
+              const Icon = [Award, Globe2, MessageSquareText][i];
+              return (
+                <article
+                  key={v.en}
+                  data-reveal={i * 0.1}
+                  className="group relative border-b border-[#E3E9F0] p-10 transition-colors duration-300 last:border-b-0 hover:bg-[#F8FBFF] md:border-b-0 md:border-r md:last:border-r-0"
+                >
+                  <span className="absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-[#1F7AE0] transition-transform duration-500 group-hover:scale-x-100" />
+                  <div className="flex items-start justify-between">
+                    <Icon className="h-7 w-7 text-[#1F7AE0]" strokeWidth={1.6} />
+                    <span className="t-body-sm text-[#999]">0{i + 1}</span>
+                  </div>
+                  <h3 className="t-heading-lg mt-14">{v.en}</h3>
+                  <p className="t-nav mt-1 !font-bold text-[#1F7AE0]">{v.ko}</p>
+                  <p className="t-body-md mt-5 text-[#666]">{v.desc}</p>
+                </article>
+              );
+            })}
+          </div>
+          <div className="mt-8 flex justify-end">
+            <Link href="/about" className="t-nav inline-flex items-center gap-2 !font-bold transition-colors hover:text-[#1F7AE0]">
+              회사 소개 <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
-        <div className="mt-24 flex items-center">
-          {C.values.items.map((v, i) => (
-            <div
-              key={v.en}
-              className={`a-venn-${i} relative -mx-[3vw] grid aspect-square w-[min(34vw,420px)] place-items-center rounded-full border border-white/25 text-center mix-blend-screen`}
-              style={{ background: i === 1 ? 'rgba(58,109,255,.22)' : 'rgba(58,109,255,.07)' }}
-            >
-              <div className="a-venn-txt px-10">
-                <span className="t-caption text-white/40">0{i + 1}</span>
-                <h3 className="t-heading-lg mt-3">{v.en}</h3>
-                <p className="t-nav mt-1 !font-bold text-[#71B4FE]">{v.ko}</p>
-                <p className="t-body-md mx-auto mt-4 hidden max-w-[200px] text-white/60 md:block">{v.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <a href="#" className="t-nav absolute bottom-16 right-[max(1.5rem,calc((100vw-1180px)/2+1.5rem))] inline-flex items-center gap-2 !font-bold text-white/80 transition-colors hover:text-[#71B4FE]">
-          회사 소개 <ArrowRight className="h-4 w-4" />
-        </a>
       </section>
 
       <Footer />
@@ -507,18 +510,20 @@ export default function DesignA() {
 }
 
 export function Footer({ tone = 'dark' }: { tone?: 'dark' | 'light' }) {
-  // 11/03 Figma 푸터: #092A2F, 로고 + 메뉴 / 소개 문구 + 저작권
+  // Figma 푸터: #1A2D3B, 로고 + 메뉴 / 소개 문구 + 저작권
   const dark = tone === 'dark';
   return (
-    <footer className={`px-6 py-12 ${dark ? 'bg-[#092A2F] text-white' : 'bg-white text-[#0d1b2a]'}`}>
+    <footer className={`px-6 py-12 ${dark ? 'bg-[#1A2D3B] text-white' : 'bg-white text-[#0d1b2a]'}`}>
       <div className="mx-auto max-w-[1240px]">
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <Wordmark />
+          <Link href="/" aria-label="신한네트웍스 홈">
+            <Wordmark />
+          </Link>
           <nav className={`t-nav flex gap-8 ${dark ? 'text-white/80' : 'text-slate-600'}`}>
             {C.footerNav.map((n) => (
-              <a key={n} href="#" className="transition-colors hover:text-[#71B4FE]">
-                {n}
-              </a>
+              <Link key={n.label} href={n.href} className="transition-colors hover:text-[#71B4FE]">
+                {n.label}
+              </Link>
             ))}
           </nav>
         </div>

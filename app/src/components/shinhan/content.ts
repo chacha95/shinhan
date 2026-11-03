@@ -1,7 +1,12 @@
 // 시안 공통 콘텐츠 — Figma(신한네트웍스 Main) + 기존 사이트(shsystek.co.kr) 기준
 
 export const nav = ['ABOUT', 'PRODUCT', 'CONTACT'] as const;
-export const footerNav = ['회사소개', '제품소개', '비즈니스 문의'] as const;
+export const routes: Record<(typeof nav)[number], string> = { ABOUT: '/about', PRODUCT: '/product', CONTACT: '/contact' };
+export const footerNav = [
+  { label: '회사소개', href: '/about' },
+  { label: '제품소개', href: '/product' },
+  { label: '비즈니스 문의', href: '/contact' },
+];
 
 export const hero = {
   eyebrow: 'MEDICAL EXPERTISE, CONNECTED',
@@ -23,19 +28,12 @@ export const stats = [
   { value: 1500, suffix: '+', label: '파트너 병원' },
 ];
 
+const inmodeDesc = 'INMODE는 의료진과 환자의 더 나은 경험을 위해 혁신적인 에너지 기반 기술과 정교한 솔루션을 제공하는 글로벌 의료기기 브랜드입니다.';
+
+// Featured Product — Figma 기준 2개 모델
 export const products: { name: string; tag: string; copy: string; image?: string; desc?: string }[] = [
-  {
-    name: 'INMODE RF',
-    image: '/products/inmode-rf.png',
-    tag: 'INMODE',
-    copy: '혁신적인 기술로\n의료의 새로운 기준을 제시합니다.',
-    desc: 'INMODE는 의료진과 환자의 더 나은 경험을 위해 혁신적인 에너지 기반 기술과 정교한 솔루션을 제공하는 글로벌 의료기기 브랜드입니다.',
-  },
-  { name: 'SofWave', image: '/products/sofwave.png', tag: 'Ultrasound Lifting', copy: '당신의 시간이\n느리게 흐를 수 있도록.' },
-  { name: 'StarWalker QX', image: '/products/starwalker-qx.png', tag: 'Hybrid Laser', copy: '나노와 피코,\n그 이상의 가치 하이브리드.' },
-  { name: 'J CATH', image: '/products/j-cath.png', tag: 'EP Catheter', copy: '세계 최초\nMulti Bi-Directional Duodeca.' },
-  { name: 'ComboLab', image: '/products/combolab.png', tag: 'Hemodynamic · EP', copy: 'Hemodynamic과 EP 시술을\n단 하나의 장비로.' },
-  { name: 'Type 2300', image: '/products/type-2300.png', tag: 'Ultrasound', copy: 'Ultrasound\nfor your speciality.' },
+  { name: 'INMODE RF', image: '/products/inmode-rf.webp', tag: 'INMODE', copy: '혁신적인 기술로\n의료의 새로운 기준을 제시합니다.', desc: inmodeDesc },
+  { name: 'Evoke Naked', image: '/products/evoke.webp', tag: 'INMODE', copy: '혁신적인 기술로\n의료의 새로운 기준을 제시합니다.', desc: inmodeDesc },
 ];
 
 export const partnership = {
