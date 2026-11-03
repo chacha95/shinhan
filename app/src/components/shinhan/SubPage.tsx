@@ -4,6 +4,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap, useSmoothScroll, reveal } from './motion';
 import { Header, Footer } from './DesignA';
+import { WaveField } from './WaveField';
 import * as C from './content';
 
 export function SubPage({ active, children }: { active: (typeof C.nav)[number]; children: React.ReactNode }) {
@@ -39,9 +40,11 @@ export function SubHero({ eyebrow, title, desc }: { eyebrow: string; title: stri
         className="absolute inset-0"
         style={{
           background:
-            'linear-gradient(90deg, rgba(3,28,35,.98) 0%, rgba(3,35,42,.92) 46%, rgba(2,27,34,.7) 100%), linear-gradient(0deg, rgba(3,25,31,.9) 0%, rgba(3,25,31,0) 55%)',
+            'linear-gradient(90deg, rgba(3,28,35,.9) 0%, rgba(3,35,42,.62) 46%, rgba(2,27,34,.3) 100%), linear-gradient(0deg, rgba(3,25,31,.75) 0%, rgba(3,25,31,0) 55%)',
         }}
       />
+      {/* 옅은 물결선 — 메인 히어로와 같은 물결 */}
+      <WaveField cx={0.5} cy={0.6} circle={false} interactive={false} className="absolute inset-0 h-full w-full opacity-20 mix-blend-screen" />
       {/* Figma blur 글로우 2개 */}
       <span className="pointer-events-none absolute -bottom-1/2 -left-40 h-[643px] w-[723px] rounded-full" style={{ background: 'radial-gradient(70.71% 70.71% at 50% 50%, rgba(121,201,250,.35) 0%, rgba(121,201,250,0) 64%)', animation: 'pv-float 9s ease-in-out infinite' }} />
       <span className="pointer-events-none absolute -right-40 -top-1/3 h-[614px] w-[614px] rounded-full opacity-70" style={{ background: 'radial-gradient(70.71% 70.71% at 50% 50%, rgba(121,201,250,.35) 0%, rgba(121,201,250,0) 64%)', animation: 'pv-float 11s ease-in-out infinite reverse' }} />

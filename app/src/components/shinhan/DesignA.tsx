@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ArrowRight, ArrowLeft, ArrowUpRight, Award, Globe2, MessageSquareText } from 'lucide-react';
 import { gsap, useSmoothScroll, reveal, countUp } from './motion';
 import { WaveField } from './WaveField';
+import { BackToTop } from './BackToTop';
 import { LogoType, Symbol, Wordmark } from './Symbol';
 import { ProductVisual } from './ProductVisual';
 import * as C from './content';
@@ -173,7 +174,7 @@ function VideoSection() {
 const N = C.products.length;
 
 /** 제품 슬라이더 — 기존 사이트처럼 카드 전체가 옆으로 밀리며 넘어가고, 새 슬라이드 글이 아래에서 올라옴 */
-export function ProductSlider({ cta = { label: '제품 자세히 보기', href: '/product' } }: { cta?: { label: string; href: string } }) {
+export function ProductSlider({ cta = { label: '제품 자세히 보기', href: 'https://inmode.co.kr/' } }: { cta?: { label: string; href: string } }) {
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
   useEffect(() => {
@@ -188,10 +189,7 @@ export function ProductSlider({ cta = { label: '제품 자세히 보기', href: 
       <div className="flex transition-transform duration-[900ms] ease-[cubic-bezier(.77,0,.18,1)]" style={{ transform: `translateX(-${i * 100}%)` }}>
         {C.products.map((p, k) => (
           <div key={p.name} className="grid w-full shrink-0 md:grid-cols-2" aria-hidden={k !== i}>
-            <div className="relative">
-              <ProductVisual name={p.name} image={p.image} className="h-full aspect-[4/3] md:aspect-auto md:min-h-[440px]" />
-              <span className="t-tag absolute left-6 top-6 rounded-full border border-[#1F7AE0]/25 bg-white/80 px-3 py-1 !text-[10px] text-[#1F7AE0]">GLOBAL MEDICAL BRAND</span>
-            </div>
+            <ProductVisual name={p.name} image={p.image} className="aspect-[662/620] h-full w-full" />
             {/* 활성 슬라이드가 될 때마다 key가 바뀌어 글이 다시 올라옴 */}
             <div key={k === i ? `on-${i}` : 'off'} className="flex flex-col justify-center p-10 pb-32 md:p-14 md:pb-36">
               {[
@@ -199,9 +197,15 @@ export function ProductSlider({ cta = { label: '제품 자세히 보기', href: 
                 <h3 key="n" className="t-display-xl mt-4">{p.name}</h3>,
                 <p key="c" className="mt-6 whitespace-pre-line text-[20px] font-bold leading-[1.3] tracking-[-0.02em]">{p.copy}</p>,
                 ...(p.desc ? [<p key="d" className="t-body-md mt-4 max-w-[440px] text-[#666]">{p.desc}</p>] : []),
-                <Link key="l" href={cta.href} className="t-nav mt-10 inline-flex w-fit items-center gap-2 !font-bold">
-                  {cta.label} <ArrowRight className="h-4 w-4" />
-                </Link>,
+                cta.href.startsWith('http') ? (
+                  <a key="l" href={cta.href} target="_blank" rel="noopener noreferrer" className="t-nav mt-10 inline-flex w-fit items-center gap-2 !font-bold">
+                    {cta.label} <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                ) : (
+                  <Link key="l" href={cta.href} className="t-nav mt-10 inline-flex w-fit items-center gap-2 !font-bold">
+                    {cta.label} <ArrowRight className="h-4 w-4" />
+                  </Link>
+                ),
               ].map((el, n) => (
                 <div key={n} style={k === i ? { animation: `rise-in .9s cubic-bezier(.16,1,.3,1) ${0.35 + n * 0.09}s both` } : undefined}>
                   {el}
@@ -514,6 +518,7 @@ export function Footer({ tone = 'dark' }: { tone?: 'dark' | 'light' }) {
   const dark = tone === 'dark';
   return (
     <footer className={`px-6 py-12 ${dark ? 'bg-[#1A2D3B] text-white' : 'bg-white text-[#0d1b2a]'}`}>
+      <BackToTop />
       <div className="mx-auto max-w-[1240px]">
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <Link href="/" aria-label="신한네트웍스 홈">

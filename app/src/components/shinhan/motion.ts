@@ -9,10 +9,19 @@ gsap.registerPlugin(ScrollTrigger);
 
 export { gsap, ScrollTrigger };
 
+let lenisInstance: Lenis | null = null;
+
+/** 맨 위로 부드럽게 (Lenis가 있으면 Lenis로) */
+export function scrollToTop() {
+  if (lenisInstance) lenisInstance.scrollTo(0, { duration: 1.4 });
+  else window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 /** Lenis 부드러운 스크롤 + ScrollTrigger 동기화 */
 export function useSmoothScroll() {
   useEffect(() => {
     const lenis = new Lenis({ lerp: 0.09 });
+    lenisInstance = lenis;
     lenis.on('scroll', ScrollTrigger.update);
     const tick = (t: number) => lenis.raf(t * 1000);
     gsap.ticker.add(tick);
@@ -33,6 +42,7 @@ export function useSmoothScroll() {
       window.removeEventListener('load', onLoad);
       gsap.ticker.remove(tick);
       lenis.destroy();
+      lenisInstance = null;
     };
   }, []);
 }

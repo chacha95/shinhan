@@ -57,7 +57,7 @@ export default function ProductPage() {
           <SectionHead eyebrow="OFFICIAL RESOURCES" title={'제품을 더 자세히\n알아보세요.'} desc={'공식 브랜드 콘텐츠와 제품 관련 자료를 통해\n필요한 정보를 확인할 수 있습니다.'} />
           <div className="mt-16 grid md:grid-cols-2">
             <a
-              href="https://inmodemd.com/"
+              href="https://inmode.co.kr/"
               target="_blank"
               rel="noopener noreferrer"
               data-reveal
